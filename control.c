@@ -1,0 +1,551 @@
+#include "control.h"
+#include "stdlib.h"
+#include "remote.h"
+#include "htc.h"
+#include "eeprom.h"
+#include "IO.h"
+
+static void dim_color(char *pupdown, char *pwait, char *pcolor);
+static void bright_color(char *color);
+
+
+
+/*
+Checks rc5.command to decide which mode is selected (dim or manual). The ELSE-IF is necessary as otherwise if 
+the first IF is true, it makes the second one also true
+*/
+void set_mode(void)
+{
+	char command, test;
+
+	command = rc5.command;
+	// enable dim mode if current mode is manual and OK button is pressed.
+	test = ((command == CMD_OK) && (control.mode == MANUAL));
+	if (test == 1)
+	{
+		control.mode = DIM;
+	}
+	else
+	{
+		// enable manual mode if current mode is dim and one of the following buttons is pressed:
+		// OK, Power, a Color Button, Program +-. All other buttons are ignored
+		// todo: geht das wirklich nur so??
+		test = ((command == CMD_OK) || (command == CMD_POWER) || (command == CMD_RED) || (command == CMD_GREEN) || 
+				(command == CMD_DARKBLUE) || (command == CMD_DARKORANGE) || (command == CMD_DARKGREEN) || (command == CMD_PURPLE) 
+				|| (command == CMD_ORANGE) || (command == CMD_TURQUOISE) || (command == CMD_PINK) || (command == CMD_YELLOW) 
+				|| (command == CMD_BLUE) || (command == CMD_BROWN) || (command == CMD_PROGRAMDEC) || (command == CMD_PROGRAMINC));
+		test = (test && (control.mode == DIM));
+		if (test == 1)
+		{
+			control.mode = MANUAL;
+		}
+	}
+}
+
+
+/*
+Checks rc5.command to decide which function is going to be executed while in manual mode.
+*/
+void set_function(void)
+{
+	char command, test;
+
+	//function selection only makes sense while in manual mode
+	if (control.mode == MANUAL)
+	{
+		command = rc5.command;
+		// some functions are not essential as they are interconnected with only one button, but it's easier this way
+		// Power button function
+		if (command == CMD_POWER)
+		{
+			control.function = FUNC_POWER;
+		}
+		// color button function
+		test = ((command == CMD_RED) || (command == CMD_GREEN) || (command == CMD_DARKBLUE) || (command == CMD_DARKORANGE) || 
+				(command == CMD_DARKGREEN) || (command == CMD_PURPLE) || (command == CMD_ORANGE) || (command == CMD_TURQUOISE) 
+				|| (command == CMD_PINK) || (command == CMD_YELLOW) || (command == CMD_BLUE) || (command == CMD_BROWN));
+		if (test == 1)
+		{
+			control.function = FUNC_COLOR;
+		}
+		// inc/dec brightness buttons
+		test = ((command == CMD_BRIGHTDEC) || (command == CMD_BRIGHTINC));
+		if (test == 1)
+		{
+			control.function = FUNC_BRIGHT;
+		}
+		// +/- Program Buttons
+		test = ((command == CMD_PROGRAMDEC) || (command == CMD_PROGRAMINC));
+		if (test == 1)
+		{
+			control.function = FUNC_PROGRAM;
+		}
+		// color on/off button
+		if (command == CMD_COLORSONOFF)
+		{
+			control.function = FUNC_COLORSONOFF;
+		}
+		// this fuction doesn't have a user visible function, it only stores which color button has been pressed last
+		test = ((command == CMD_REDBUTTON) || (command == CMD_GREENBUTTON) || (command == CMD_WHITEBUTTON) || (command == CMD_BLUEBUTTON));
+		if (test == 1)
+		{
+			control.function = FUNC_COLOR_SELECT;
+		}
+		// white on/off button
+		if (command == CMD_WHITEONOFF)
+		{
+			control.function = FUNC_WHITEONOFF;
+		}	
+		// color storate function
+		if (command == CMD_MEMORY)
+		{
+			control.function = FUNC_MEMORY;
+		}	
+	}
+}
+
+/*
+Starts dim mode. 
+- Dims off white color (not used in dim mode)
+*/
+void mode_dim(void)
+{
+	static char updown1, updown2, updown3, wait1, wait2, wait3;
+	char *updown1_p, *updown2_p, *updown3_p, *wait1_p, *wait2_p, *wait3_p, *red_p, *green_p, *blue_p;
+	//dim red
+	if (TMR2IF == 1)							// if timer2 postscaler flag is set
+	{	
+		/*nothing to do with red, but doing it here saves a timer
+		this slowly dims off white when starting dim mode
+		*/
+		if (color.white	!= 0)
+		{
+			color.white--;
+		}
+		TMR2IF = 0;								// clear it and call dim function
+		red_p = &color.red;
+		wait1_p = &wait1;
+		updown1_p = &updown1;				
+		dim_color(updown1_p, wait1_p, red_p);				
+	}
+	//dim led green
+	if (TMR4IF == 1)
+	{											// if timer4 postscaler flag is set
+		TMR4IF = 0;								// clear it and call dim function
+		green_p = &color.green;
+		wait2_p = &wait2;
+		updown2_p = &updown2;
+		dim_color(updown2_p, wait2_p, green_p);		
+	}
+	//dim led blue
+	if (TMR6IF == 1)							// if timer6 postscaler flag is set
+	{							
+		TMR6IF = 0;								// clear it and call dim function
+		updown3_p = &updown3;
+		wait3_p = &wait3;
+		blue_p = &color.blue;
+		dim_color(updown3_p, wait3_p, blue_p);
+	}
+}
+
+static void dim_color(char *pupdown, char *pwait, char *pcolor)
+{
+	switch (*pupdown)						// test if brightness should be increased =0 or decreased =1 or should remain constant >1
+	{	
+		case (0) :					
+		{		
+			if (*pcolor == 0xff)			// when maximum brightness is reached, set flag to start waiting time
+			{
+					*pupdown = 2;
+			}
+			else
+			{
+				*pcolor = *pcolor + 1;		// increase brightness by one (++ doesn't work)
+			}
+			break;
+		}	
+		case (1) :
+		{
+			if (*pcolor == 0)				// when minimum brightness is reached, clear flag to start waiting time
+			{
+				*pupdown = 3;
+			}
+			else
+			{
+				*pcolor = *pcolor - 1;			// decrease brightness by one
+			}
+			break;
+		}
+		case (2) :
+		{
+			//*pwait = *pwait - 1;				// block until wait == 0
+		//	if (*pwait == 0)					// returns to dimming operation and resets waiting timer
+		//	{
+				*pupdown = 1;
+			//	*pwait = rand();				// creates random number
+			//	*pwait = *pwait & 0b00111111;	// limit random number to 64
+		//	}
+			break;
+		}
+		case (3) :
+		{
+			*pwait = *pwait - 1;				// block until wait == 0
+			if (*pwait == 0)					// returns to dimming operation and resets waiting timer
+			{
+				*pupdown = 0;
+				*pwait = rand();				// creates random number
+				*pwait = *pwait | 0b00011111;	// random number is at least 63
+			}
+			break;
+		}
+
+	}
+	// as color brightness and off time is set randomly, it is possilble that all colors are off. So we start dimming up instantly
+	if (color.colors == 0)
+	{
+		*pcolor = 1;
+		*pupdown = 0;
+	}
+}
+
+/*
+Switches to standby 
+todo: implementieren, was ich in der Hardware hinbekomme
+- Dims off all colors when off
+- Restores all colors when switched on (todo:)
+*/
+void onoff(void)
+{
+	//all colors off
+	color_desigred.colors = 0;
+	control.function = FUNC_FADING;
+}
+
+/*
+sets color selected by button press
+*/
+void func_color(void)
+{
+	char sel_color;
+	sel_color = rc5.command;
+	switch (sel_color)
+	{
+		case CMD_RED:
+		{
+			read_color(EE_RED);
+			break;
+		}
+		case CMD_GREEN:
+		{
+			read_color(EE_GREEN);			
+			break;
+		}
+		case CMD_DARKBLUE:
+		{
+			read_color(EE_DARKBLUE);		
+			break;
+		}
+		case CMD_DARKORANGE:
+		{
+			read_color(EE_DARKORANGE);			
+			break;
+		}
+		case CMD_DARKGREEN:
+		{
+			read_color(EE_DARKGREEN);			
+			break;
+		}
+		case CMD_PURPLE:
+		{
+			read_color(EE_PURPLE);		
+			break;
+		}
+		case CMD_ORANGE:
+		{
+			read_color(EE_ORANGE);			
+			break;
+		}
+		case CMD_TURQUOISE:
+		{
+			read_color(EE_TURQUOISE);			
+			break;
+		}
+		case CMD_PINK:
+		{
+			read_color(EE_PINK);		
+			break;
+		}
+		case CMD_YELLOW:
+		{
+			read_color(EE_YELLOW);	
+			break;
+		}
+		case CMD_BLUE:
+		{
+			read_color(EE_BLUE);
+			break;
+		}
+		case CMD_BROWN:
+		{
+			read_color(EE_BROWN);		
+			break;
+		}
+	}
+	//go to idle mode
+	control.function = FUNC_FADING;
+}
+
+/*
+increses/decreases with colorbutton selected color brightness
+*/
+void func_bright(void)
+{
+	char color_button;
+	char *red_p, *green_p, *blue_p, *white_p;
+	color_button = control.color_button;
+	switch (color_button)
+	{
+		case (CMD_REDBUTTON):
+		{
+			red_p = &color.red;
+			bright_color(red_p);
+			break;
+		}
+		case (CMD_GREENBUTTON):
+		{
+			green_p = &color.green;
+			bright_color(green_p);
+			break;
+		}
+		case (CMD_BLUEBUTTON):
+		{
+			blue_p = &color.blue;
+			bright_color(blue_p);
+			break;
+		}
+		case (CMD_WHITEBUTTON):
+		{
+			white_p = &color.white;
+			bright_color(white_p);
+			break;
+		}
+	}
+	control.function = IDLE;	
+}
+
+/*
+increses/decreases brightness of in pointer selected color until the limits are reached
+- integer color is used to detect under/overflows of the char *pcolor
+- rc5.speed is to detect if the button is kept pressed
+*/
+static void bright_color(char *pcolor)
+{
+	int color;
+	color = *pcolor;
+	// increase brightness
+	if (rc5.command == CMD_BRIGHTINC)
+	{
+		if (rc5.speed == FAST)
+		{	
+			color = color + 8;
+		}
+		else
+		{
+			color++;
+		}
+	}
+	// decrease brightness
+	if (rc5.command == CMD_BRIGHTDEC)
+	{
+		if (rc5.speed == FAST)
+		{	
+			color = color - 8;
+		}
+		else
+		{
+			color--;
+		}
+	}
+	// fit computed result back into char limits
+	if (color < 0)
+	{
+		color = 0;
+	}
+	if (color > 0xff)
+	{
+		color = 0xff;
+	}
+	*pcolor = color;
+}
+
+
+
+
+void fucn_program(void)
+{
+	// load programmed colors from eeprom. 
+	// Program memory works as ring memory
+	if (rc5.command == CMD_PROGRAMINC)
+	{
+		control.eepointer = control.eepointer + 4;
+		if (control.eepointer > EE_MAXPROG)
+		{
+			control.eepointer = EE_MINPROG;
+		}		
+	}
+	if (rc5.command == CMD_PROGRAMDEC)
+	{
+		control.eepointer = control.eepointer - 4;
+		if (control.eepointer < EE_MINPROG)
+		{
+			control.eepointer = EE_MAXPROG;
+		}		
+
+	}
+	read_color(control.eepointer);	
+	control.function = FUNC_FADING;
+}
+
+/*
+Switches on/off colors. When off, color values are stored, when back on, they are restored.
+If we have left colors off since switching off, the momentary color values are stored (function has to be called a 2nd time to do this)
+and the old ones are lost.
+*/
+void fuc_colorsonoff(void)
+{
+	static bit toggle;
+	static char red, green, blue;
+	// if colors are on now, store momentary values and dim them off. this musn't change white!
+	if (toggle == 0)
+	{
+		red = color.red;
+		green = color.green;
+		blue = color.blue;
+		color_desigred.red = 0;
+		color_desigred.green = 0;
+		color_desigred.blue = 0;
+		color_desigred.white = color.white;
+		control.function = FUNC_FADING;
+	}
+	// if colors are off, restore color values. this also musn't change white!
+	else
+	{
+		// test if we are still in color off mode. If not, the main program has to call colorsonoff again to store momentary 
+		// color values (therefore fading is only set when one if statement is processed, otherwise it remains at colorsonoff)
+		if ((color.red == 0) && (color.green == 0) && (color.blue == 0))
+		{
+			color_desigred.red = red;
+			color_desigred.green = green;
+			color_desigred.blue = blue;
+			color_desigred.white = color.white;
+			control.function = FUNC_FADING;
+		}
+	}
+	toggle = ~toggle;
+}
+
+/*
+Switches on/off white. Works the same way as white
+*/
+void fuc_whiteonoff(void)
+{
+	static bit toggle;
+	static char white;
+	// if white is on now, store momentary value and dim it off. this musn't change colors!
+	if (toggle == 0)
+	{
+		white = color.white;
+		color_desigred.red = color.red;
+		color_desigred.green = color.green;
+		color_desigred.blue = color.blue;
+		color_desigred.white = 0;
+		control.function = FUNC_FADING;
+	}
+	// if white is off, restore value. this also musn't change colors!
+	else
+	{
+		// test if we are still in white off mode. If not, the main program has to call whiteonoff again to store momentary 
+		// white value (therefore fading is only set when one if statement is processed, otherwise it remains at whiteonoff)
+		if (color.white == 0)
+		{
+			color_desigred.red = color.red;
+			color_desigred.green = color.green;
+			color_desigred.blue = color.blue;
+			color_desigred.white = white;
+			control.function = FUNC_FADING;
+		}
+	}
+	toggle = ~toggle;
+}
+
+/*
+stores which of the colored buttons on the remote has been pressed last. This is necessary for brightness function
+*/
+void func_colorselect(void)
+{
+	control.color_button = rc5.command;
+	control.function = IDLE;
+}
+
+
+
+
+
+void func_fadecolor(void)
+{
+	TMR1ON = 1;
+	if (TMR1 > 400)
+	{
+		
+		TMR1 = 0;
+		// we have to dim up or down a color to get to the new brightness. nothing is done if equal. else statement would include equal!
+		//red
+		if (color.red > color_desigred.red)
+		{
+			color.red--;
+		}
+		if (color.red < color_desigred.red)
+		{
+			color.red++;
+		}
+		//green
+		if (color.green > color_desigred.green)
+		{
+			color.green--;
+		}
+		if (color.green < color_desigred.green)
+		{
+			color.green++;
+		}
+		//blue
+		if (color.blue > color_desigred.blue)
+		{
+			color.blue--;
+		}
+		if (color.blue < color_desigred.blue)
+		{
+			color.blue++;
+		}
+		//white
+		if (color.white > color_desigred.white)
+		{
+			color.white--;
+		}
+		if (color.white < color_desigred.white)
+		{
+			color.white++;
+		}
+	}
+	//when all colors are as desigred, switch off timer and go back to idle
+	if (color.colors == color_desigred.colors)
+	{
+		TMR1ON = 0;
+		control.function = IDLE;
+	}
+}
+
+
+
+
+
+
