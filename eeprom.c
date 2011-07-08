@@ -4,13 +4,14 @@
 #include "control.h"
 #include "eeprom.h"
 #include "IO.h"
+#include "remote.h"
 
 //*****************************
 //initial data stored in EEPROM.
 //*****************************
 
 // Control and Color data (used at the very first start)
-__EEPROM_DATA(11, 0, 13, 88, 100, 0, 0, 0);				// (0)
+__EEPROM_DATA(DIM, 0, 13, EE_MINPROG, 255, 0, 0, 0);	// (0)
 __EEPROM_DATA(255, 127, 63, 32, 0, 0, 0, 0);			// (8)		
 // Reserve
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (16)

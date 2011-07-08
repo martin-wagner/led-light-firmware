@@ -2,8 +2,8 @@
 #include "remote.h"
 #include "IO.h"
 
-extern volatile long unsigned int rc5_data;
-extern volatile bit rc5_ready;
+volatile long unsigned int rc5_data;
+volatile char rc5_ready;
 
 
 /*

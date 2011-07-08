@@ -1,10 +1,8 @@
-
-
-
 extern bit get_rc5_control(void);
 extern bit test_rc5_control(void);
 
-
+volatile long unsigned int rc5_data;
+volatile char rc5_ready;
 
 
 struct Trc5

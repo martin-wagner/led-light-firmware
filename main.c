@@ -10,9 +10,6 @@
 
 void init(void);
 
-//global variables
-volatile long unsigned int rc5_data;
-volatile bit rc5_ready;
 
 void main(void)
 {
@@ -31,12 +28,11 @@ void main(void)
 	//main program loop
 	while (1 == 1)
 	{
-
 /*
 		rc5_data = 0b10010110101001010110010101;
 		rc5_ready = 1;
-*/
-	//  todo watchdog aktivieren wenn abst"urzproblem behoben
+//*/
+	//  todo watchdog aktivieren wenn abst"urzproblem behoben und programm fertig// sollte behoben sein, hat sich im interrupt aufgeh"angt
 		if (rc5_ready == 1)
 		{
 			// Gets Data from Remote, check for receive errors
@@ -58,14 +54,15 @@ void main(void)
 /*
 	//  for testing only.
 		control.mode = MANUAL;
-		control.function = FUNC_COLOR_SET;
-		rc5.command = CMD_RIGHT;
+		control.function = FUNC_COLOR;
+		rc5.command = CMD_RED;
 //*/
 
 		//Start auto fading mode
 		if (control.mode == DIM)
 		{
 			mode_dim();
+			LED_MODE = 1;
 		}
 		//manual mode
 		else
@@ -85,7 +82,7 @@ void main(void)
 				}
 				case FUNC_COLOR_SET:
 				{
-					func_bright();
+					func_color_set();
 					break;
 				}
 				case FUNC_PROGRAM:
@@ -108,11 +105,6 @@ void main(void)
 					fuc_whiteonoff();
 					break;
 				}
-				case FUNC_BRIGHT:
-				{	
-	//				func_fadecolor();
-					break;
-				}
 				case FUNC_MEMORY:
 				{	
 					//Programmier/Speicherfunktionen
@@ -129,37 +121,23 @@ void main(void)
 					//do nothing
 				}
 			}//switch
+		LED_MODE = 0;
 		}//else  
-		LED_RUN = 0;
-
-
-//irgendwie nimmt das Schreiben der PWM Ausg"ange Einfluss auf den IR Eingang
-//Bleibt dann irgendwo in der ISR h"angen, aber wo???
 
 		//calculate PWM values including brightness and update PWM values
-		//it's not necessary to calculate this every sigle cycle, but it gives a constant "off" time for the RUN LED.
 		temp = color.red * control.brightness_factor;
-		temp = temp / 100;
-//		if (temp == 44)
-//		SEGD = 1;
+		temp = temp / 255;
 		PWM_RED = temp;
 		temp = color.green * control.brightness_factor;
-		temp = temp / 100;
-//if (temp == 44)
-//		SEGD = 1;
+		temp = temp / 255;
 		PWM_GREEN = temp;
 		temp = color.blue * control.brightness_factor;
-		temp = temp / 100;
-//if (temp == 44)
-//		SEGD = 1;
+		temp = temp / 255;
 		PWM_BLUE = temp;
 		temp = color.white * control.brightness_factor;
-		temp = temp / 100;
-//if (temp == 44)
-//		SEGD = 1;
+		temp = temp / 255;
 		PWM_WHITE = temp;
 
- 		LED_RUN = 1;
 		//check if supply voltage drops out and store control data and colors
 		if (SUPPLY == 0)
 		{

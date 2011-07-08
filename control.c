@@ -96,12 +96,6 @@ void set_function(void)
 		{
 			control.function = FUNC_WHITEONOFF;
 		}	
-		// inc/dec brightness buttons
-		test = ((command == CMD_BRIGHTDEC) || (command == CMD_BRIGHTINC));
-		if (test == 1)
-		{
-			control.function = FUNC_BRIGHT;
-		}
 		// color storate function
 		if (command == CMD_MEMORY)
 		{
@@ -304,7 +298,7 @@ void func_color(void)
 /*
 increses/decreases with colorbutton selected color brightness
 */
-void func_bright(void)
+void func_color_set(void)
 {
 	char color_button;
 	char *red_p, *green_p, *blue_p, *white_p;

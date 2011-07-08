@@ -1,8 +1,6 @@
 #include "IO.h"
 #include "htc.h"								// Processor definition file
-
-extern volatile long unsigned int rc5_data;
-extern volatile bit rc5_ready;
+#include "remote.h"
 
 
 /*
@@ -18,8 +16,6 @@ void interrupt isr(void)
 	static bit isr_sel, bit_read;
 	static char n;
 	static signed char parity;
-	SEGA = 1;
-	SEGB = 1;
 	//this ISR detects the falling edge created by the IR sensor (RC5 Start Bit).
 	isr_sel = INTE && INTF;						// test if interrupt is activated and requestet by INT Pin 
 	isr_sel = isr_sel && ! rc5_ready;			// only start receiving a new frame if last one is processed
@@ -36,10 +32,7 @@ void interrupt isr(void)
 		rc5_data = 0;							// clear last rc5_datad frame
 		n = 0;									// set index to 0 read bits
 		INTE = 0;								// disable edge detection (must be activated again once receiving of the command is completed)	
-		INTF = 0;
 	}
-	SEGB = 0;
-	SEGC = 1;
 	//this ISR reads values from RB0, stores them and creates the parity. It doesn't interpret the manchester code, it just stores a bit every 0,9ms
 	isr_sel = TMR0IE && TMR0IF;	
 	if (isr_sel == 1)
@@ -77,10 +70,9 @@ void interrupt isr(void)
 			}
 			LED_RECEIVE = 0;					//clear receiving LED
 		}
-	
-		TMR0IF = 0;								// clear interrupt request
 	}
-	SEGA = 0;
-	SEGC = 0;
+	//reset interrupt requests
+	TMR0IF = 0;
+	INTF = 0;						
 	ei();
 }

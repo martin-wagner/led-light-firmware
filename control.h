@@ -3,7 +3,7 @@ extern void set_function(void);
 extern void mode_dim(void);
 extern void onoff(void);
 extern void func_color(void);
-extern void func_bright(void);
+extern void func_color_set(void);
 extern void fucn_program(void);
 extern void fuc_colorsonoff(void);
 extern void fuc_whiteonoff(void);
@@ -54,7 +54,6 @@ union Tcolor
 #define FUNC_WHITEONOFF 17
 #define FUNC_MEMORY 18
 #define FUNC_FADING 19
-#define FUNC_BRIGHT 20
 #define IDLE 0xff
 
 

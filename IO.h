@@ -1,7 +1,7 @@
 //PORTA GPIOs
 #define SEGB LATA0
 #define SEGC LATA1 
-#define LED_RECEIVE LATA2
+#define LED_MODE LATA2
 //CCP3
 //CCP4
 //MCLR
@@ -10,7 +10,7 @@
 
 //PORTB GPIOs
 #define IR_IN RB0
-#define LED_RUN LATB1
+#define LED_RECEIVE LATB1
 #define SUPPLY RB2					//Input Port for supply voltage test
 //CCP1
 #define SEGG LATB4
