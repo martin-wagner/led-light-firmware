@@ -4,7 +4,9 @@
 #include "remote.h"
 #include "control.h"
 #include "eeprom.h"
+#include "program.h"
 #include "IO.h"
+
 
 
 
@@ -44,6 +46,7 @@ void main(void)
 			{
 				set_mode();
 				set_function();
+				set_brightness();
 			}
 			else
 			{
@@ -65,7 +68,7 @@ void main(void)
 			LED_MODE = 1;
 		}
 		//manual mode
-		else
+		if (control.mode == MANUAL)
 		{
 			function = control.function;
 			switch (function)
@@ -105,11 +108,6 @@ void main(void)
 					fuc_whiteonoff();
 					break;
 				}
-				case FUNC_MEMORY:
-				{	
-					//Programmier/Speicherfunktionen
-					break;
-				}
 				case FUNC_FADING:
 				{	
 					func_fadecolor();
@@ -120,9 +118,21 @@ void main(void)
 				{																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
 					//do nothing
 				}
-			}//switch
+			}//switch		
 		LED_MODE = 0;
-		}//else  
+		}//if program is selected. program mode can only be exited by switching off power or going trough
+		if (control.mode == PROGRAM)
+		{
+			program();
+		}
+		//chech if brightness up/down is requested, increase or decrease global brightness
+		if (control.brightness_set == BRIGHT_SET)
+		{
+			//increase/decrease overall brighness
+			brightness();	
+			//reset request
+			control.brightness_set = BRIGHT_OK;
+		}
 
 		//calculate PWM values including brightness and update PWM values
 		temp = color.red * control.brightness_factor;
@@ -137,6 +147,7 @@ void main(void)
 		temp = color.white * control.brightness_factor;
 		temp = temp / 255;
 		PWM_WHITE = temp;
+
 
 		//check if supply voltage drops out and store control data and colors
 		if (SUPPLY == 0)

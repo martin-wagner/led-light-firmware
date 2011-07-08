@@ -2,235 +2,261 @@
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
 [File000]
-Location=f:\elektronik\led leuchte\firmware\control.p1
+Location=F:\elektronik\led leuchte\firmware\control.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File001]
-Location=f:\elektronik\led leuchte\firmware\eeprom.p1
+Location=F:\elektronik\led leuchte\firmware\eeprom.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File002]
-Location=f:\elektronik\led leuchte\firmware\interrupts.p1
+Location=F:\elektronik\led leuchte\firmware\interrupts.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File003]
-Location=f:\elektronik\led leuchte\firmware\main.p1
+Location=F:\elektronik\led leuchte\firmware\main.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File004]
-Location=f:\elektronik\led leuchte\firmware\remote.p1
+Location=F:\elektronik\led leuchte\firmware\remote.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File005]
-Location=f:\elektronik\led leuchte\firmware\rgb.cof
-Folder=Output
+Location=F:\elektronik\led leuchte\firmware\program.p1
+Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File006]
-Location=f:\elektronik\led leuchte\firmware\rgb.hex
-Folder=Output
+Location=F:\elektronik\led leuchte\firmware\sevenseg.p1
+Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File007]
-Location=f:\elektronik\led leuchte\firmware\rgb.sym
+Location=F:\elektronik\led leuchte\firmware\rgb.cof
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File008]
-Location=f:\elektronik\led leuchte\firmware\rgb.map
+Location=F:\elektronik\led leuchte\firmware\rgb.hex
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File009]
-Location=f:\elektronik\led leuchte\firmware\rgb.hxl
+Location=F:\elektronik\led leuchte\firmware\rgb.sym
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File010]
-Location=f:\elektronik\led leuchte\firmware\startup.lst
+Location=F:\elektronik\led leuchte\firmware\rgb.map
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File011]
-Location=f:\elektronik\led leuchte\firmware\startup.rlf
+Location=F:\elektronik\led leuchte\firmware\rgb.hxl
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File012]
-Location=f:\elektronik\led leuchte\firmware\doprnt.p1
+Location=F:\elektronik\led leuchte\firmware\startup.lst
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File013]
-Location=f:\elektronik\led leuchte\firmware\doprnt.pre
+Location=F:\elektronik\led leuchte\firmware\startup.rlf
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File014]
-Location=f:\elektronik\led leuchte\firmware\rgb.obj
+Location=F:\elektronik\led leuchte\firmware\doprnt.p1
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File015]
-Location=f:\elektronik\led leuchte\firmware\rgb.lst
+Location=F:\elektronik\led leuchte\firmware\doprnt.pre
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File016]
-Location=f:\elektronik\led leuchte\firmware\rgb.rlf
+Location=F:\elektronik\led leuchte\firmware\rgb.obj
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=
 DebugOptions=
 [File017]
-Location=f:\elektronik\led leuchte\firmware\rgb.sdb
+Location=F:\elektronik\led leuchte\firmware\rgb.lst
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
 LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
-SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c||<obj>||<lib>||<lkr>||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=C9=4
+TraceCmdString=
+DebugOptions=
+[File018]
+Location=F:\elektronik\led leuchte\firmware\rgb.rlf
+Folder=Output
+DeviceName=PIC16F1827
+LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
+LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
+LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
+SuiteArgsString=
+ToolArgsString=C9=4
+TraceCmdString=
+DebugOptions=
+[File019]
+Location=F:\elektronik\led leuchte\firmware\rgb.sdb
+Folder=Output
+DeviceName=PIC16F1827
+LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
+LanguageToolID={0F51667C-2BAF-4EF8-A2C9-AB83788A793D}
+LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
+PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
+SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
 ToolArgsString=C9=4
 TraceCmdString=

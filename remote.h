@@ -95,7 +95,7 @@ command - 6 bits
 //down
 #define CMD_DOWN 			0b00101110
 //memory programming function
-#define CMD_MEMORY 			0b00100000
+#define CMD_PROGRAM			0b00100000
 //cancel
 #define CMD_CANCEL 			0b00101101
-
+//command musn't be 0xff, this is used as 'invalid command'!!!!!!!

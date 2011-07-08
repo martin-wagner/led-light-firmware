@@ -20,16 +20,16 @@ extern void write_color(char adr);
 #define EE_BLUE 80
 #define EE_BROWN 84
 #define EE_PROG0 88
-#define EE_PROG1 92
-#define EE_PROG2 96
-#define EE_PROG3 100
-#define EE_PROG4 104
-#define EE_PROG5 108
-#define EE_PROG6 112
-#define EE_PROG7 116
-#define EE_PROG8 120
-#define EE_PROG9 124
+#define EE_PROG1 96
+#define EE_PROG2 104
+#define EE_PROG3 112
+#define EE_PROG4 120
+#define EE_PROG5 128
+#define EE_PROG6 136
+#define EE_PROG7 144
+#define EE_PROG8 152
+#define EE_PROG9 160
 #define EE_COUNT 254
 //limits
 #define EE_MINPROG 88
-#define EE_MAXPROG 124
+#define EE_MAXPROG 160

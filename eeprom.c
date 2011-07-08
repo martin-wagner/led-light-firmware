@@ -26,11 +26,17 @@ __EEPROM_DATA(255, 50, 0, 5, 0, 255, 100, 2);			// (64) orange, turquoise
 __EEPROM_DATA(180, 0, 180, 30, 255, 200, 2, 5);			// (72) pink, yellow			
 __EEPROM_DATA(0, 30, 255, 30, 100, 50, 50, 0);			// (80) blue, brown
 // programmable colors (defaults)
-__EEPROM_DATA(0, 20, 50, 255, 5, 0, 0, 255);			// (88) daylight, cool white
-__EEPROM_DATA(50, 30, 0, 255, 70, 40, 0, 255);			// (96) warm white, warm white 2
-__EEPROM_DATA(50, 100, 150, 0, 150, 100, 50, 0);		// (104)
-__EEPROM_DATA(255, 255, 255, 255, 5, 5, 5, 5);			// (116)
-__EEPROM_DATA(255, 255, 0, 255, 255, 255, 150, 255);	// (124)
+//   		( R  G    B   W   bright), brightness is not used at the moment
+__EEPROM_DATA(0, 20, 50, 255, 255, 0, 0, 0);			// (88) daylight
+__EEPROM_DATA(5, 0, 0, 255, 255, 0, 0, 0);				// (96) cool white
+__EEPROM_DATA(50, 30, 0, 255, 255, 0, 0, 0);			// (104)warm white 
+__EEPROM_DATA(70, 40, 0, 255, 255, 0, 0, 0);			// (112)warm white 2
+__EEPROM_DATA(50, 30, 0, 255, 50, 0, 0, 0);				// (120)
+__EEPROM_DATA(50, 30, 0, 255, 10, 0, 0, 0);				// (128)
+__EEPROM_DATA(50, 30, 0, 255, 50, 0, 0, 0);				// (136)
+__EEPROM_DATA(50, 30, 0, 255, 100, 0, 0, 0);			// (144)
+__EEPROM_DATA(50, 30, 0, 255, 150, 0, 0, 0);			// (152)
+__EEPROM_DATA(50, 30, 0, 255, 200, 0, 0, 0);			// (160)
 
 
 /*
@@ -87,6 +93,11 @@ Byte 11: color.white
 */
 void write_eeprom(void)
 {	
+	//program musn't resume in program mode
+	if (control.mode == PROGRAM)
+	{
+		control.mode = MANUAL;
+	}
 	eeprom_write((EE_RUNDATA + 0), control.mode);
 	eeprom_write((EE_RUNDATA + 1), control.function);
 	eeprom_write((EE_RUNDATA + 2), control.color_button);

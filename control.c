@@ -7,11 +7,11 @@
 
 static void dim_color(char *pupdown, char *pwait, char *pcolor);
 static void bright_color(char *color);
-
+static void bright_factor(char *pfactor);
 
 
 /*
-Checks rc5.command to decide which mode is selected (dim or manual). The ELSE-IF is necessary as otherwise if 
+Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
 the first IF is true, it makes the second one also true
 */
 void set_mode(void)
@@ -19,9 +19,13 @@ void set_mode(void)
 	char command, test;
 
 	command = rc5.command;
+	//enable program mode. can only be exited by switching off power or going trough
+	if (command == CMD_PROGRAM)
+	{
+		control.mode = PROGRAM;
+	}
 	// enable dim mode if current mode is manual and OK button is pressed.
-	test = ((command == CMD_OK) && (control.mode == MANUAL));
-	if (test == 1)
+	else if ((command == CMD_OK) && (control.mode == MANUAL))
 	{
 		control.mode = DIM;
 	}
@@ -96,13 +100,25 @@ void set_function(void)
 		{
 			control.function = FUNC_WHITEONOFF;
 		}	
-		// color storate function
-		if (command == CMD_MEMORY)
-		{
-			control.function = FUNC_MEMORY;
-		}	
 	}
 }
+
+/*
+Checks rc5.command to decide if we want to set the overall brightness. This is indipendent to the modes
+*/
+void set_brightness(void)
+{
+	char command, test;
+	command = rc5.command;
+	// brightness left/right enables brightness mode
+	test = ((command == CMD_BRIGHTINC) || (command == CMD_BRIGHTDEC));
+	if (test == 1)
+	{
+		control.brightness_set = BRIGHT_SET;
+	}
+}
+
+
 
 /*
 Starts dim mode. 
@@ -387,7 +403,7 @@ void fucn_program(void)
 	// Program memory works as ring memory
 	if (rc5.command == CMD_PROGRAMINC)
 	{
-		control.eepointer = control.eepointer + 4;
+		control.eepointer = control.eepointer + 8;
 		if (control.eepointer > EE_MAXPROG)
 		{
 			control.eepointer = EE_MINPROG;
@@ -395,7 +411,7 @@ void fucn_program(void)
 	}
 	if (rc5.command == CMD_PROGRAMDEC)
 	{
-		control.eepointer = control.eepointer - 4;
+		control.eepointer = control.eepointer - 8;
 		if (control.eepointer < EE_MINPROG)
 		{
 			control.eepointer = EE_MAXPROG;
@@ -544,8 +560,60 @@ void func_fadecolor(void)
 	}
 }
 
+/*
+increses/decreases overall color brightness
+*/
+void brightness(void)
+{
+	char *brightness_factor_p;
+	brightness_factor_p = &control.brightness_factor;
+	//set new brightness
+	bright_factor(brightness_factor_p);
+}
 
-
-
-
+/*
+works exactly the same as bright_color
+increses/decreases the brightness factor until the limits are reached
+- integer factor is used to detect under/overflows of the char *pfactor
+- rc5.speed is to detect if the button is kept pressed
+*/
+static void bright_factor(char *pfactor)
+{
+	int factor;
+	factor = *pfactor;
+	// increase brightness
+	if (rc5.command == CMD_BRIGHTINC)
+	{
+		if (rc5.speed == FAST)
+		{	
+			factor = factor + 8;
+		}
+		else
+		{
+			factor++;
+		}
+	}
+	// decrease brightness
+	if (rc5.command == CMD_BRIGHTDEC)
+	{
+		if (rc5.speed == FAST)
+		{	
+			factor = factor - 8;
+		}
+		else
+		{
+			factor--;
+		}
+	}
+	// fit computed result back into char limits
+	if (factor < 0)
+	{
+		factor = 0;
+	}
+	if (factor > 0xff)
+	{
+		factor = 0xff;
+	}
+	*pfactor = factor;
+}
 

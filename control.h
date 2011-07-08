@@ -1,5 +1,6 @@
 extern void set_mode(void);
 extern void set_function(void);
+extern void set_brightness(void);
 extern void mode_dim(void);
 extern void onoff(void);
 extern void func_color(void);
@@ -9,7 +10,7 @@ extern void fuc_colorsonoff(void);
 extern void fuc_whiteonoff(void);
 extern void func_colorselect(void);
 extern void func_fadecolor(void);
-
+extern void brightness(void);
 
 // this is used to control the program flow
 struct Tcontrol
@@ -20,7 +21,8 @@ struct Tcontrol
 	// EEPROM pointer in here is not a C Pointer !!!
 	int eepointer;
 	//Stores the factor for brightness (0..100)
-	int brightness_factor;
+	char brightness_set;
+	char brightness_factor;
 } control;
 
 //Stores the momentary and desigred color value
@@ -43,6 +45,7 @@ union Tcolor
 // mode -> manual/dim operation
 #define MANUAL 10
 #define DIM 11
+#define PROGRAM 12
 
 // functions (numbers are randomly selected)
 #define FUNC_POWER 10						
@@ -52,8 +55,9 @@ union Tcolor
 #define FUNC_COLORSONOFF 14
 #define FUNC_COLOR_SELECT 16							//stores which color button has been pressed last
 #define FUNC_WHITEONOFF 17
-#define FUNC_MEMORY 18
-#define FUNC_FADING 19
+#define FUNC_FADING 18
 #define IDLE 0xff
 
-
+//brightness_set
+#define BRIGHT_SET 10
+#define BRIGHT_OK 0
