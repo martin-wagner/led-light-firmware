@@ -1,7 +1,7 @@
 //PORTA GPIOs
 #define SEGB LATA0
 #define SEGC LATA1 
-#define LED_MODE LATA2
+#define LED_STATUS LATA2
 //CCP3
 //CCP4
 //MCLR
@@ -18,9 +18,12 @@
 //CCP2
 #define SEGF LATB7
 
-
-// Name PWM Outputs
+// Name PWM Outputs. Low two bits are in config register
 #define PWM_GREEN CCPR1L
+#define PWM_GREEN_L CCP1CONbits.DC1B
 #define PWM_RED CCPR2L
+#define PWM_RED_L CCP2CONbits.DC2B
 #define PWM_WHITE CCPR3L
+#define PWM_WHITE_L CCP3CONbits.DC3B
 #define PWM_BLUE CCPR4L
+#define PWM_BLUE_L CCP4CONbits.DC4B

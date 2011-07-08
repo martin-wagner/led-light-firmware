@@ -8,7 +8,8 @@
 #include "sevenseg.h"
 #include "IO.h"
 
-
+__CONFIG(0x39dc);
+__CONFIG(0x3fff);
 
 
 void init(void);
@@ -16,25 +17,22 @@ void init(void);
 
 void main(void)
 {
-	//variables
-	char n, function, test;
-	unsigned int temp, i;
+	char n, function, test = 0;
+	unsigned int supply;
+	short long int temp;
 	static bit error;
-
-
-	//##settings##
 	init();
 	load_eeprom();
+	ADGO = 1;									// start first a/d conversation
 	ei();										// enable interrupts
-
-
 	//main program loop
 	while (1 == 1)
 	{
-/*
+		/*
 		rc5_data = 0b10010110101001010110010101;
 		rc5_ready = 1;
-//*/
+		//*/
+
 		//watchdog reset
 		CLRWDT();
 
@@ -56,12 +54,12 @@ void main(void)
 			}
 		}//if
 
-/*
-	//  for testing only.
+		/*
+		//  for debugging only.
 		control.mode = MANUAL;
 		control.function = FUNC_COLOR;
 		rc5.command = CMD_RED;
-//*/
+		//*/
 
 		//Start auto fading mode
 		if (control.mode == DIM)
@@ -133,35 +131,62 @@ void main(void)
 			//reset request
 			control.brightness_set = BRIGHT_OK;
 		}
-
 		//calculate PWM values including brightness and update PWM values
-		temp = color.red * control.brightness_factor;
-		temp = temp / 255;
-		PWM_RED = temp;
-		temp = color.green * control.brightness_factor;
-		temp = temp / 255;
-		PWM_GREEN = temp;
-		temp = color.blue * control.brightness_factor;
-		temp = temp / 255;
-		PWM_BLUE = temp;
-		temp = color.white * control.brightness_factor;
-		temp = temp / 255;
-		PWM_WHITE = temp;
-
-
+		temp = color.red;
+		temp = (control.brightness_factor * temp) >> 8;		// >>8 = /0xff
+		//high
+		PWM_RED = temp >> 2;
+		//two low bits
+		PWM_RED_L = temp;
+		temp = color.green;
+		temp = (control.brightness_factor * temp) >> 8;
+		//high
+		PWM_GREEN = temp >> 2;
+		//two low bits
+		PWM_GREEN_L = temp;
+		temp = color.blue;// * control.brightness_factor;
+		temp = (control.brightness_factor * temp) >> 8;
+		//high
+		PWM_BLUE = temp >> 2;
+		//two low bits
+		PWM_BLUE_L = temp;
+		temp = color.white;// * control.brightness_factor;
+		temp = (control.brightness_factor * temp) >> 8;
+		//high
+		PWM_WHITE = temp >> 2;
+		//two low bits
+		PWM_WHITE_L = temp;
 		//check if supply voltage drops out and store control data and colors
-		if (SUPPLY == 0)
+		if (ADGO == 0)		//-> a/d conversation finished
 		{
-			write_eeprom();
-			//wait until power finally drops out
-			//switch on display to drain capacitor
-			lookup(8);
-			LED_RECEIVE = 1;
-			LED_MODE = 1;
-			while (1 == 1)
+			supply = ADRES;
+			//start new conversation
+			ADGO = 1;
+			//if supply < ~4.8V
+			if (supply < 1000)
 			{
-				//watchdog reset
-				CLRWDT();
+				//when power finally drops out, the pic restarts several times (and then comes here straight again). 
+				//this prevents that the eeprom ist overwritten in this stage.
+				//todo: how do I assure that the adc doesn't do any strange things in this stage (like produce values between 800 and 1024)
+				if ((supply > 800) && (supply < 1024))
+				{
+					write_eeprom();
+				}
+				//switch on display to drain capacitor
+				lookup(8);
+				LED_STATUS = 1;
+				//here we wait until either power drops out finally or power is switched back on. then we do a watchdot restart
+				while (1 == 1)
+				{
+					ADGO = 1;
+					while (ADGO == 1){};
+					supply = ADRES;
+					if (supply != 1023)
+					{
+						//watchdog reset
+						CLRWDT();
+					}
+				}
 			}
 		}
 	}//while	
@@ -175,21 +200,16 @@ void init(void)
 {
 	//set up oscillator
 	OSCCON = 0b11101010;							// internal oscillator 4Mhz
-
-	//set up io ports
-	PORTA = 0x00;									// prevent ports from possibility of short circuits when switched to output
-	PORTB = 0x00;
-	TRISB = 0b00000101;								// 1 = input
-	TRISA = 0b00000000;								
-
-	//set up adc (I don't use the adc in here)
-	ANSELA = 0x00;									// analog input configuration register must be configured
-	ANSELB = 0x00;
-//	ADCON1 = 0b01110000;							// set prescaler
-//	ADCON0 = 0b00000001;							// left adjust, Vref = Vdd, ch0, A/D on
-//	ANSELA = 0b00000001;							// select channel (do this in code when changed more than once)
 	
 	//set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 16 and reset 255 => 250 Hz.
+	//switch all io to input
+	TRISA = 0xff;
+	TRISB = 0xff;	
+	//switch off outputs
+	PWM_RED = 0;
+	PWM_GREEN = 0;
+	PWM_BLUE = 0;
+	PWM_WHITE = 0;
 	T2CON = 0b1101110;								// timer on, prescaler; postscaler for dimming speed (slow)
 	T4CON = 0b1110110;								// dimming speed medium
 	T6CON = 0b1111110;								// dimming speed fast. slow, medium and fast are only slightly different and support random while dimming
@@ -205,6 +225,33 @@ void init(void)
 	CCP2CON = 0b00001100;							// single output pwm channel 2
 	CCP3CON = 0b00001100;							// single output pwm channel 3
 	CCP4CON = 0b00001100;							// single output pwm channel 4
+
+	//set up io ports
+	PORTA = 0x00;									// prevent ports from possibility of short circuits when switched to output
+	PORTB = 0x00;
+	TRISB = 0b00000101;								// 1 = input
+	TRISA = 0b00000000;								
+
+	//set up adc (used to detect voltage dropout)
+	ANSELA = 0x00;									// analog input configuration register must be configured
+	ANSELB = 0b00000100;							// select GPIO used as analogue input	
+	/*
+	ADCON0
+	bit 0 = 0
+	CHS = 01010 AN10
+	GO/DONE = 0 nothing to do
+	ADON = 1 AD is on
+	*/
+	ADCON0 = 0b00101001;	
+	/*
+	ADCON1
+	ADFM = 1 right adjust result
+	ADCS = 101 F ADC = Fosc/16
+	bit 4 = 0
+	ADNREF = 0 neg ref = Vss
+	ADPREF = 00 Vref = Vdd
+	*/
+	ADCON1 = 0b11010000;
 
 	//set up timer 1 (used for color fading between different fuctions)
 	/*
@@ -222,7 +269,7 @@ void init(void)
 	*/
 	TMR1GE = 0;
 
-	//set up timer 0 (used for delay in remote control protocol\
+	//set up timer 0 (used for delay in remote control protocol)
 	//TMR0CS 0 = Internal instruction cycle clock (FOSC/4)
 	TMR0CS = 0;
 	//PSA 0 = Prescaler is assigned to the Timer0 module

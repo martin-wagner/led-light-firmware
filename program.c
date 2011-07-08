@@ -61,7 +61,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -82,7 +82,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -103,7 +103,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -124,7 +124,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -145,7 +145,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -166,7 +166,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -187,7 +187,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}		
@@ -208,7 +208,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -229,7 +229,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//and go to next state
 			state ++;
 		}
@@ -246,7 +246,7 @@ void program(void)
 		case 20:
 		{
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//clear written
 			written = NO;
 			//Set character to dim speed
@@ -265,7 +265,7 @@ void program(void)
 		case 22:
 		{
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			//clear written
 			written = NO;
 			//set character to power up
@@ -296,7 +296,7 @@ void program(void)
 			//clear written
 			written = NO;
 			//reset LED
-			LED_MODE = 0;
+			LED_STATUS = 0;
 			break;
 		}
 	}	
@@ -315,7 +315,7 @@ static void program_color(void)
 		//prevent to execute this subroutine multiple times
 		written = YES;
 		//show write process is done
-		LED_MODE = 1;
+		LED_STATUS = 1;
 		
 	}
 }
@@ -360,7 +360,7 @@ static char set_dim_speed(char character)
 		//prevent to execute this subroutine multiple times
 		written = YES;
 		//show write process is done
-		LED_MODE = 1;
+		LED_STATUS = 1;
 	}
 	return character;
 }
@@ -406,7 +406,7 @@ static char set_powerup_mode(char character)
 		//prevent to execute this subroutine multiple times
 		written = YES;
 		//show write process is done
-		LED_MODE = 1;
+		LED_STATUS = 1;
 	}
 	return character;
 }

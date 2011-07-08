@@ -4,11 +4,14 @@
 #include "htc.h"
 #include "eeprom.h"
 #include "IO.h"
+#include "sevenseg.h"
 
-static void dim_color(char *pupdown, char *pwait, char *pcolor);
-static void bright_color(char *color);
+static void dim_color(char *pupdown, char *pwait, int *pcolor);
+static void bright_color(int *pcolor);
 static void bright_factor(char *pfactor);
 
+//time to display something on the 7seg
+static char display_on;
 
 /*
 Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
@@ -23,17 +26,12 @@ void set_mode(void)
 	if (command == CMD_PROGRAM)
 	{
 		control.mode = PROGRAM;
-		//switch off led
-		LED_MODE = 0;
 	}
 	// enable dim mode if current mode is manual and OK button is pressed.
 	else if ((command == CMD_OK) && (control.mode == MANUAL))
 	{
-		//timer1 here is used to create radom numbers
-		TMR1ON = 1;
 		control.mode = DIM;
-		//switch on led
-		LED_MODE = 1;
+		display_on = 30;
 	}
 	else
 	{
@@ -48,11 +46,10 @@ void set_mode(void)
 		if (test == 1)
 		{
 			control.mode = MANUAL;
+			//when quit dim mode
 			//switch timer off and clear it
 			TMR1ON = 0;
-			TMR1 = 0;
-			//switch off led
-			LED_MODE = 0;			
+			TMR1 = 0;			
 		}
 	}
 }
@@ -137,8 +134,11 @@ Starts dim mode.
 */
 void mode_dim(void)
 {
-	static char updown1, updown2, updown3, wait1, wait2, wait3, i1, i2, i3;
-	char *updown1_p, *updown2_p, *updown3_p, *wait1_p, *wait2_p, *wait3_p, *red_p, *green_p, *blue_p;
+	static char updown1, updown2, updown3, i1, i2, i3, wait1, wait2, wait3;
+	char *updown1_p, *updown2_p, *updown3_p, *wait1_p, *wait2_p, *wait3_p;
+	int *red_p, *green_p, *blue_p;
+	//timer1 here is used to create radom numbers
+	TMR1ON = 1;
 	//dim red
 	if (TMR2IF == 1)							// if timer2 postscaler flag is set
 	{	
@@ -149,6 +149,16 @@ void mode_dim(void)
 		if (color.white	!= 0)
 		{
 			color.white--;
+		}
+		//this shows letter "d" for a short time to indicate dim mode
+		if (display_on != 0)
+		{
+			display_on --;
+			lookup(SD);
+		}
+		else
+		{
+			lookup(S0);
 		}
 		//slow down dim mode as set while programming
 		if (i1 == control.dim_mode_speed)
@@ -201,13 +211,14 @@ dim works as state machine => dim up => remain there for random time => dim down
 						   |______________________________________________________________________________________|
 gets: pointers
 */
-static void dim_color(char *pupdown, char *pwait, char *pcolor)
+static void dim_color(char *pupdown, char *pwait, int *pcolor)
 {
+	char i;
 	switch (*pupdown)						// test if brightness should be increased =0 or decreased =1 or should remain constant >1
 	{	
 		case (0) :					
 		{		
-			if (*pcolor == 0xff)			// when maximum brightness is reached, set flag to start waiting time
+			if (*pcolor >= 0x3ff)			// when maximum brightness is reached, set flag to start waiting time
 			{
 					*pupdown = 2;
 			}
@@ -219,7 +230,7 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 		}	
 		case (1) :
 		{
-			if (*pcolor == 0)				// when minimum brightness is reached, clear flag to start waiting time
+			if (*pcolor <= 0)				// when minimum brightness is reached, clear flag to start waiting time
 			{
 				*pupdown = 3;
 			}
@@ -250,8 +261,12 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 				// random number is at least 63
 				do
 				{
-					//*pwait = rand();			// creates random number
+					//random delay if wait < 63
+					for (i = 0; i < *pwait; i++);
+		//			*pwait = rand();			// creates random number
 					*pwait = TMR1L;				// reading timer value at random time instead of rand() function saves 5% program memory
+		//			wait = *pwait;
+		//			write_byte(16, wait);
 				}
 				while (*pwait < 63);
 			}
@@ -259,9 +274,9 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 		}
 	}
 	// as color brightness and off time is set randomly, it is possilble that all colors are off. So we start dimming up instantly
-	if (color.colors == 0)
+	if ((color.red == 0 ) && (color.green == 0) && (color.blue == 0))
 	{
-		*pcolor = 1;
+		*pcolor = 2;
 		*pupdown = 0;
 	}
 }
@@ -274,7 +289,10 @@ Switches to standby
 void onoff(void)
 {
 	//all colors off
-	color_desigred.colors = 0;
+	color_desigred.red = 0;
+	color_desigred.green = 0;
+	color_desigred.blue = 0;
+	color_desigred.white = 0;
 	control.function = FUNC_FADING;
 }
 
@@ -348,7 +366,6 @@ void func_color(void)
 			break;
 		}
 	}
-	//go to idle mode
 	control.function = FUNC_FADING;
 }
 
@@ -358,7 +375,7 @@ increses/decreases with colorbutton selected color brightness
 void func_color_set(void)
 {
 	char color_button;
-	char *red_p, *green_p, *blue_p, *white_p;
+	int *red_p, *green_p, *blue_p, *white_p;
 	color_button = control.color_button;
 	switch (color_button)
 	{
@@ -392,10 +409,9 @@ void func_color_set(void)
 
 /*
 increses/decreases brightness of in pointer selected color until the limits are reached
-- integer color is used to detect under/overflows of the char *pcolor
 - rc5.speed is to detect if the button is kept pressed
 */
-static void bright_color(char *pcolor)
+static void bright_color(int *pcolor)
 {
 	int color;
 	color = *pcolor;
@@ -404,7 +420,7 @@ static void bright_color(char *pcolor)
 	{
 		if (rc5.speed == FAST)
 		{	
-			color = color + 8;
+			color = color + 25;
 		}
 		else
 		{
@@ -416,21 +432,21 @@ static void bright_color(char *pcolor)
 	{
 		if (rc5.speed == FAST)
 		{	
-			color = color - 8;
+			color = color - 25;
 		}
 		else
 		{
 			color--;
 		}
 	}
-	// fit computed result back into char limits
+	// fit computed result back into limits
 	if (color < 0)
 	{
 		color = 0;
 	}
-	if (color > 0xff)
+	if (color > 0x3ff)
 	{
-		color = 0xff;
+		color = 0x3ff;
 	}
 	*pcolor = color;
 }
@@ -471,7 +487,7 @@ and the old ones are lost.
 void fuc_colorsonoff(void)
 {
 	static bit toggle;
-	static char red, green, blue;
+	static int red, green, blue;
 	// if colors are on now, store momentary values and dim them off. this musn't change white!
 	if (toggle == 0)
 	{
@@ -507,7 +523,7 @@ Switches on/off white. Works the same way as colors
 void fuc_whiteonoff(void)
 {
 	static bit toggle;
-	static char white;
+	static int white;
 	// if white is on now, store momentary value and dim it off. this musn't change colors!
 	if (toggle == 0)
 	{
@@ -551,7 +567,7 @@ void func_fadecolor(void)
 {
 	//here timer1 is used as timer
 	TMR1ON = 1;				
-	if (TMR1 > 400)
+	if (TMR1 > 150)
 	{
 		
 		TMR1 = 0;
@@ -594,7 +610,8 @@ void func_fadecolor(void)
 		}
 	}
 	//when all colors are as desigred, switch off timer and go back to idle
-	if (color.colors == color_desigred.colors)
+	if ((color.red == color_desigred.red) && (color.green == color_desigred.green) && 
+	   (color.blue == color_desigred.blue) && (color.white == color_desigred.white))
 	{
 		TMR1ON = 0;
 		control.function = IDLE;
@@ -617,6 +634,7 @@ works exactly the same as bright_color
 increses/decreases the brightness factor until the limits are reached
 - integer factor is used to detect under/overflows of the char *pfactor
 - rc5.speed is to detect if the button is kept pressed
+- brightness is only 8 bit wide
 */
 static void bright_factor(char *pfactor)
 {

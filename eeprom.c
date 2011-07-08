@@ -11,7 +11,7 @@
 //*****************************
 
 // Control and Color data (used at the very first start)
-__EEPROM_DATA(DIM, 0, 13, EE_MINPROG, 255, 3, 1, 0);	// (0)
+__EEPROM_DATA(MANUAL, 0, 13, EE_MINPROG, 255, 3, 1, 0);	// (0)
 __EEPROM_DATA(255, 127, 63, 32, 0, 0, 0, 0);			// (8)		
 // Reserve
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (16)
@@ -54,6 +54,10 @@ Byte 10: color.blue
 Byte 11: color.white
 */
 
+/*
+ALL colors are processed as 10 Bit values but only stored in EEPROM as 8 bit values!!!!
+therefore when loading, the read value is rotated to the left by two and when writing two to the rigth.
+*/
 
 
 /*
@@ -65,16 +69,20 @@ Byte 2: B
 Byte 3: W
 Gets: Read start address
 */
-void read_color(char adr)
+void read_color(char addr)
 {
-	char temp;
-	temp = eeprom_read(adr + 0);
+	int temp;
+	temp = eeprom_read(addr + 0);
+	temp = temp << 2;
 	color_desigred.red = temp;
-	temp = eeprom_read(adr + 1);
+	temp = eeprom_read(addr + 1);
+	temp = temp << 2;
 	color_desigred.green = temp;
-	temp = eeprom_read(adr + 2);
+	temp = eeprom_read(addr + 2);
+	temp = temp << 2;
 	color_desigred.blue = temp;
-	temp = eeprom_read(adr + 3);
+	temp = eeprom_read(addr + 3);
+	temp = temp << 2;
 	color_desigred.white = temp;
 }
 
@@ -87,12 +95,17 @@ Byte 2: B
 Byte 3: W
 Gets: Write start address
 */
-void write_color(char adr)
+void write_color(char addr)
 {
-	eeprom_write((adr + 0), color.red);
-	eeprom_write((adr + 1), color.green);
-	eeprom_write((adr + 2), color.blue);
-	eeprom_write((adr + 3), color.white);
+	char temp;
+	temp = color.red >> 2;
+	eeprom_write((addr + 0), temp);
+	temp = color.green >> 2;
+	eeprom_write((addr + 1), temp);
+	temp = color.blue >> 2;
+	eeprom_write((addr + 2), temp);
+	temp = color.white >> 2;
+	eeprom_write((addr + 3), temp);
 }
 
 
@@ -107,9 +120,12 @@ void write_byte(char addr, char byte)
 
 /*
 write control data and colors to EEPROM. This is done when the power drops out, obviously the PIC needs some time to do this!!!
+increments switch-on counter by one. can be read with pickit. we use 24 bit, so the eeprom will quit working before we overflow
 */
 void write_eeprom(void)
-{	
+{
+	unsigned int temp;
+	unsigned short long int counter;	
 	//we musn't resume in program mode
 	if (control.mode == PROGRAM)
 	{
@@ -120,21 +136,30 @@ void write_eeprom(void)
 	eeprom_write((EE_RUNDATA + 2), control.color_button);
 	eeprom_write((EE_RUNDATA + 3), control.eepointer);
 	eeprom_write((EE_RUNDATA + 4), control.brightness_factor);
-	eeprom_write((EE_RUNDATA + 8), color.red);
-	eeprom_write((EE_RUNDATA + 9), color.green);
-	eeprom_write((EE_RUNDATA + 10), color.blue);
-	eeprom_write((EE_RUNDATA + 11), color.white);
+	write_color(EE_RUNDATA + 8);
+	//read counter
+	counter = eeprom_read(EE_COUNT + 0);
+	counter = counter << 16;
+	temp = eeprom_read(EE_COUNT + 1);
+	counter = counter + (temp << 8);
+	temp = eeprom_read(EE_COUNT + 2);
+	counter = counter + temp;
+	counter++;
+	//write counter  (working???)
+	temp = counter;
+	eeprom_write((EE_COUNT + 2), (char)temp);
+	temp = counter >> 8;
+	eeprom_write((EE_COUNT + 1), (char)temp);
+	temp = counter >> 16;
+	eeprom_write((EE_COUNT + 0), (char)temp);
 }
 
 /* 
 restores data written at power off from the EEPROM
-increments switch-on counter by one. can be read with pickit. we use 24 bit, so the eeprom will quit before we overflow
 we can start processing where we stopped before power off 
 */
 void load_eeprom(void)
 {
-	unsigned int temp;
-	unsigned short long int counter;
 	control.color_button = eeprom_read(EE_RUNDATA + 2);
 	control.eepointer = eeprom_read(EE_RUNDATA + 3);
 	control.brightness_factor = eeprom_read(EE_RUNDATA + 4);
@@ -153,13 +178,12 @@ void load_eeprom(void)
 		{
 			control.mode = eeprom_read(EE_RUNDATA + 0);
 			control.function = eeprom_read(EE_RUNDATA + 1);
-			color.red = eeprom_read(EE_RUNDATA + 8);
-			color.green = eeprom_read(EE_RUNDATA + 9);
-			color.blue = eeprom_read(EE_RUNDATA + 10);
-			color.white = eeprom_read(EE_RUNDATA + 11);
+			read_color(EE_RUNDATA + 8);
+			//read color reads to color_desigred but here we need it directly
+			color = color_desigred;
 			break;
 		}
-		//same system as above, mode = MANUAL, load color 10
+		//same as above, mode = MANUAL, load color 10
 		case 4:
 		{				
 			control.brightness_factor = 0xff;	
@@ -168,26 +192,9 @@ void load_eeprom(void)
 		{
 			control.mode = MANUAL;
 			control.function = IDLE;
-			color.red = eeprom_read(EE_PROG9 + 0);
-			color.green = eeprom_read(EE_PROG9 + 1);
-			color.blue = eeprom_read(EE_PROG9 + 2);
-			color.white = eeprom_read(EE_PROG9 + 3);
+			read_color(EE_PROG9);
+			color = color_desigred;
 			break;
 		}	
 	}
-	//read counter
-	counter = eeprom_read(EE_COUNT + 0);
-	counter = counter << 16;
-	temp = eeprom_read(EE_COUNT + 1);
-	counter = counter + (temp << 8);
-	temp = eeprom_read(EE_COUNT + 2);
-	counter = counter + temp;
-	counter++;
-	//write counter  (working???)
-	temp = counter;
-	eeprom_write((EE_COUNT + 2), (char)temp);
-	temp = counter >> 8;
-	eeprom_write((EE_COUNT + 1), (char)temp);
-	temp = counter >> 16;
-	eeprom_write((EE_COUNT + 0), (char)temp);
 }

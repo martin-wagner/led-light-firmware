@@ -27,16 +27,12 @@ struct Tcontrol
 } control;
 
 //Stores the momentary and desigred color value
-union Tcolor
+struct Tcolor
 {
-	unsigned long int colors;								//for comparision tasks (== 0 or  == equal)	
-	struct
-	{
-		char red;
-		char green;
-		char blue;
-		char white;
-	};
+	int red;
+	int green;
+	int blue;
+	int white;
 } color, color_desigred;
 
 
