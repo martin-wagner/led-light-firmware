@@ -2,6 +2,7 @@ extern void load_eeprom(void);
 extern void write_eeprom(void);
 extern void read_color(char adr);
 extern void write_color(char adr);
+extern void write_byte(char adr, char byte);
 
 //******************
 //address definitions for EEPROM
@@ -29,7 +30,7 @@ extern void write_color(char adr);
 #define EE_PROG7 144
 #define EE_PROG8 152
 #define EE_PROG9 160
-#define EE_COUNT 254
+#define EE_COUNT 253
 //limits
 #define EE_MINPROG 88
 #define EE_MAXPROG 160

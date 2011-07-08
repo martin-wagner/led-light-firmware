@@ -5,6 +5,7 @@
 #include "control.h"
 #include "eeprom.h"
 #include "program.h"
+#include "sevenseg.h"
 #include "IO.h"
 
 
@@ -17,7 +18,7 @@ void main(void)
 {
 	//variables
 	char n, function, test;
-	unsigned int temp;
+	unsigned int temp, i;
 	static bit error;
 
 
@@ -34,11 +35,12 @@ void main(void)
 		rc5_data = 0b10010110101001010110010101;
 		rc5_ready = 1;
 //*/
-	//  todo watchdog aktivieren wenn abst"urzproblem behoben und programm fertig// sollte behoben sein, hat sich im interrupt aufgeh"angt
+		//watchdog reset
+		CLRWDT();
+
 		if (rc5_ready == 1)
 		{
 			// Gets Data from Remote, check for receive errors
-			// todo: st"urzt nach x tastendr"ucken/zeit (?) ab
 			error = get_rc5_control();
 			error = error || test_rc5_control();
 			// if receive worked correct, check which mode and which function is selected (dim or manual)
@@ -65,7 +67,6 @@ void main(void)
 		if (control.mode == DIM)
 		{
 			mode_dim();
-			LED_MODE = 1;
 		}
 		//manual mode
 		if (control.mode == MANUAL)
@@ -119,7 +120,6 @@ void main(void)
 					//do nothing
 				}
 			}//switch		
-		LED_MODE = 0;
 		}//if program is selected. program mode can only be exited by switching off power or going trough
 		if (control.mode == PROGRAM)
 		{
@@ -154,7 +154,15 @@ void main(void)
 		{
 			write_eeprom();
 			//wait until power finally drops out
-			while (1 == 1);
+			//switch on display to drain capacitor
+			lookup(8);
+			LED_RECEIVE = 1;
+			LED_MODE = 1;
+			while (1 == 1)
+			{
+				//watchdog reset
+				CLRWDT();
+			}
 		}
 	}//while	
 }//main
@@ -175,20 +183,23 @@ void init(void)
 	TRISA = 0b00000000;								
 
 	//set up adc (I don't use the adc in here)
-	ANSELA = 0x00;									// analog input configuration register must be set
+	ANSELA = 0x00;									// analog input configuration register must be configured
 	ANSELB = 0x00;
 //	ADCON1 = 0b01110000;							// set prescaler
 //	ADCON0 = 0b00000001;							// left adjust, Vref = Vdd, ch0, A/D on
 //	ANSELA = 0b00000001;							// select channel (do this in code when changed more than once)
 	
-	//set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 64 and reset 128 => 120 Hz.
-	T2CON = 0b1101111;								// timer on, prescaler; postscaler for dimming speed (slow)
-	T4CON = 0b1110111;								// dimming speed medium
-	T6CON = 0b1111111;								// dimming speed fast. slow, medium and fast are only slightly different and support random while dimming
-	PR2 = 128;										// timer reset value (pwm period length)
-	PR4 = 128;
-	PR6 = 128;
-
+	//set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 16 and reset 255 => 250 Hz.
+	T2CON = 0b1101110;								// timer on, prescaler; postscaler for dimming speed (slow)
+	T4CON = 0b1110110;								// dimming speed medium
+	T6CON = 0b1111110;								// dimming speed fast. slow, medium and fast are only slightly different and support random while dimming
+	PR2 = 0xff;										// timer reset value (pwm period length)
+	PR4 = 0xff;
+	PR6 = 0xff;
+	PWM_RED = 0;
+	PWM_GREEN = 0;
+	PWM_BLUE = 0;
+	PWM_WHITE = 0;
 	CCPTMRS = 0b00000000;							// select timer2 for all pwm channels
 	CCP1CON = 0b00001100;							// single output pwm channel 1
 	CCP2CON = 0b00001100;							// single output pwm channel 2

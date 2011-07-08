@@ -75,10 +75,10 @@ file_005=program.c
 file_006=sevenseg.c
 file_007=control.h
 file_008=eeprom.h
-file_009=IO.h
-file_010=remote.h
-file_011=sevenseg.h
-file_012=program.h
+file_009=remote.h
+file_010=sevenseg.h
+file_011=program.h
+file_012=IO.h
 [SUITE_INFO]
 suite_guid={507D93FD-16F1-4270-980F-0C7C0207E6D3}
 suite_state=

@@ -20,9 +20,10 @@ struct Tcontrol
 	char color_button;
 	// EEPROM pointer in here is not a C Pointer !!!
 	int eepointer;
-	//Stores the factor for brightness (0..100)
 	char brightness_set;
 	char brightness_factor;
+	char dim_mode_speed;
+	char power_up_mode;
 } control;
 
 //Stores the momentary and desigred color value

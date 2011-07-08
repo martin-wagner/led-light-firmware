@@ -11,7 +11,7 @@
 //*****************************
 
 // Control and Color data (used at the very first start)
-__EEPROM_DATA(DIM, 0, 13, EE_MINPROG, 255, 0, 0, 0);	// (0)
+__EEPROM_DATA(DIM, 0, 13, EE_MINPROG, 255, 3, 1, 0);	// (0)
 __EEPROM_DATA(255, 127, 63, 32, 0, 0, 0, 0);			// (8)		
 // Reserve
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (16)
@@ -31,12 +31,29 @@ __EEPROM_DATA(0, 20, 50, 255, 255, 0, 0, 0);			// (88) daylight
 __EEPROM_DATA(5, 0, 0, 255, 255, 0, 0, 0);				// (96) cool white
 __EEPROM_DATA(50, 30, 0, 255, 255, 0, 0, 0);			// (104)warm white 
 __EEPROM_DATA(70, 40, 0, 255, 255, 0, 0, 0);			// (112)warm white 2
-__EEPROM_DATA(50, 30, 0, 255, 50, 0, 0, 0);				// (120)
-__EEPROM_DATA(50, 30, 0, 255, 10, 0, 0, 0);				// (128)
-__EEPROM_DATA(50, 30, 0, 255, 50, 0, 0, 0);				// (136)
-__EEPROM_DATA(50, 30, 0, 255, 100, 0, 0, 0);			// (144)
-__EEPROM_DATA(50, 30, 0, 255, 150, 0, 0, 0);			// (152)
-__EEPROM_DATA(50, 30, 0, 255, 200, 0, 0, 0);			// (160)
+__EEPROM_DATA(100, 50, 0, 255, 50, 0, 0, 0);			// (120)
+__EEPROM_DATA(63, 63, 63, 63, 255, 0, 0, 0);			// (128)
+__EEPROM_DATA(127, 127, 127, 127, 255, 0, 0, 0);		// (136)
+__EEPROM_DATA(255, 255, 255, 255, 75, 0, 0, 0);	    	// (144)
+__EEPROM_DATA(255, 255, 255, 255, 175, 0, 0, 0);		// (152)
+__EEPROM_DATA(255, 255, 255, 255, 255, 0, 0, 0);		// (160)
+
+/*
+//DO NOT CHANGE, for new use unused bytes!!!
+Memory Map:
+Byte 0: control.mode
+Byte 1: control.function
+Byte 2: control.color_button (not really neccesary...)
+Byte 3: control.eepointer (lowbyte)
+Byte 4: control.brighntess_factor (lowbyte)
+Byte 5: control.dim_mode_speed (read at every start, written only in programming mode)
+Byte 6: control.power_up_mode (read at every start, written only in programming mode)
+Byte 8: color.red
+Byte 9: color.green
+Byte 10: color.blue
+Byte 11: color.white
+*/
+
 
 
 /*
@@ -45,7 +62,7 @@ Memory Map:
 Byte 0: R
 Byte 1: G
 Byte 2: B
-Byte 4: W
+Byte 3: W
 Gets: Read start address
 */
 void read_color(char adr)
@@ -67,7 +84,7 @@ Memory Map:
 Byte 0: R
 Byte 1: G
 Byte 2: B
-Byte 4: W
+Byte 3: W
 Gets: Write start address
 */
 void write_color(char adr)
@@ -78,22 +95,22 @@ void write_color(char adr)
 	eeprom_write((adr + 3), color.white);
 }
 
+
+/*
+Writes 1 byte to eeprom. this routine is not essential, but eeprom_write is now called only from eeprom file
+Gets: Write start address, byte to write
+*/
+void write_byte(char addr, char byte)
+{
+	eeprom_write(addr, byte);
+}
+
 /*
 write control data and colors to EEPROM. This is done when the power drops out, obviously the PIC needs some time to do this!!!
-Memory Map:
-Byte 0: control.mode
-Byte 1: control.function
-Byte 2: control.color_button (not really neccesary...)
-Byte 3: control.eepointer (lowbyte)
-Byte 4: control.brighntess_factor (lowbyte)
-Byte 8: color.red
-Byte 9: color.green
-Byte 10: color.blue
-Byte 11: color.white
 */
 void write_eeprom(void)
 {	
-	//program musn't resume in program mode
+	//we musn't resume in program mode
 	if (control.mode == PROGRAM)
 	{
 		control.mode = MANUAL;
@@ -111,40 +128,66 @@ void write_eeprom(void)
 
 /* 
 restores data written at power off from the EEPROM
-increments switch-on counter by one. can be read with pickit
+increments switch-on counter by one. can be read with pickit. we use 24 bit, so the eeprom will quit before we overflow
 we can start processing where we stopped before power off 
 */
 void load_eeprom(void)
 {
-	char temp;
-	int counter;
-	temp = eeprom_read(EE_RUNDATA + 0);
-	control.mode = temp;
-	temp = eeprom_read(EE_RUNDATA + 1);
-	control.function = temp;
-	temp = eeprom_read(EE_RUNDATA + 2);
-	control.color_button = temp;
-	temp = eeprom_read(EE_RUNDATA + 3);
-	control.eepointer = temp;
-	temp = eeprom_read(EE_RUNDATA + 4);
-	control.brightness_factor = temp;
-	temp = eeprom_read(EE_RUNDATA + 8);
-	color.red = temp;
-	temp = eeprom_read(EE_RUNDATA + 9);
-	color.green = temp;
-	temp = eeprom_read(EE_RUNDATA + 10);
-	color.blue = temp;
-	temp = eeprom_read(EE_RUNDATA + 11);
-	color.white = temp;
+	unsigned int temp;
+	unsigned short long int counter;
+	control.color_button = eeprom_read(EE_RUNDATA + 2);
+	control.eepointer = eeprom_read(EE_RUNDATA + 3);
+	control.brightness_factor = eeprom_read(EE_RUNDATA + 4);
+	control.dim_mode_speed = eeprom_read(EE_RUNDATA + 5);
+	control.power_up_mode = eeprom_read(EE_RUNDATA + 6);
+	//test which power up mode we are using
+	switch (control.power_up_mode)
+	{	
+		//load color + max bright. no break, so case 1 is also executed to load colors and mode.
+		case 2:
+		{				
+			control.brightness_factor = 0xff;	
+		}
+		//load colors and mode
+		case 1:
+		{
+			control.mode = eeprom_read(EE_RUNDATA + 0);
+			control.function = eeprom_read(EE_RUNDATA + 1);
+			color.red = eeprom_read(EE_RUNDATA + 8);
+			color.green = eeprom_read(EE_RUNDATA + 9);
+			color.blue = eeprom_read(EE_RUNDATA + 10);
+			color.white = eeprom_read(EE_RUNDATA + 11);
+			break;
+		}
+		//same system as above, mode = MANUAL, load color 10
+		case 4:
+		{				
+			control.brightness_factor = 0xff;	
+		}
+		case 3:
+		{
+			control.mode = MANUAL;
+			control.function = IDLE;
+			color.red = eeprom_read(EE_PROG9 + 0);
+			color.green = eeprom_read(EE_PROG9 + 1);
+			color.blue = eeprom_read(EE_PROG9 + 2);
+			color.white = eeprom_read(EE_PROG9 + 3);
+			break;
+		}	
+	}
 	//read counter
 	counter = eeprom_read(EE_COUNT + 0);
-	counter = counter << 8;
+	counter = counter << 16;
 	temp = eeprom_read(EE_COUNT + 1);
+	counter = counter + (temp << 8);
+	temp = eeprom_read(EE_COUNT + 2);
 	counter = counter + temp;
 	counter++;
 	//write counter  (working???)
 	temp = counter;
-	eeprom_write((EE_COUNT + 1), temp);
+	eeprom_write((EE_COUNT + 2), (char)temp);
 	temp = counter >> 8;
-	eeprom_write((EE_COUNT + 0), temp);
+	eeprom_write((EE_COUNT + 1), (char)temp);
+	temp = counter >> 16;
+	eeprom_write((EE_COUNT + 0), (char)temp);
 }

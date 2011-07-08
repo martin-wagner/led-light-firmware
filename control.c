@@ -23,11 +23,17 @@ void set_mode(void)
 	if (command == CMD_PROGRAM)
 	{
 		control.mode = PROGRAM;
+		//switch off led
+		LED_MODE = 0;
 	}
 	// enable dim mode if current mode is manual and OK button is pressed.
 	else if ((command == CMD_OK) && (control.mode == MANUAL))
 	{
+		//timer1 here is used to create radom numbers
+		TMR1ON = 1;
 		control.mode = DIM;
+		//switch on led
+		LED_MODE = 1;
 	}
 	else
 	{
@@ -42,6 +48,11 @@ void set_mode(void)
 		if (test == 1)
 		{
 			control.mode = MANUAL;
+			//switch timer off and clear it
+			TMR1ON = 0;
+			TMR1 = 0;
+			//switch off led
+			LED_MODE = 0;			
 		}
 	}
 }
@@ -126,11 +137,12 @@ Starts dim mode.
 */
 void mode_dim(void)
 {
-	static char updown1, updown2, updown3, wait1, wait2, wait3;
+	static char updown1, updown2, updown3, wait1, wait2, wait3, i1, i2, i3;
 	char *updown1_p, *updown2_p, *updown3_p, *wait1_p, *wait2_p, *wait3_p, *red_p, *green_p, *blue_p;
 	//dim red
 	if (TMR2IF == 1)							// if timer2 postscaler flag is set
 	{	
+		TMR2IF = 0;								// clear it
 		/*nothing to do with red, but doing it here saves a timer
 		this slowly dims off white when starting dim mode
 		*/
@@ -138,32 +150,57 @@ void mode_dim(void)
 		{
 			color.white--;
 		}
-		TMR2IF = 0;								// clear it and call dim function
-		red_p = &color.red;
-		wait1_p = &wait1;
-		updown1_p = &updown1;				
-		dim_color(updown1_p, wait1_p, red_p);	
+		//slow down dim mode as set while programming
+		if (i1 == control.dim_mode_speed)
+		{		
+			red_p = &color.red;
+			wait1_p = &wait1;
+			updown1_p = &updown1;
+			//call dim function				
+			dim_color(updown1_p, wait1_p, red_p);	
+			i1 = 0;
+		}
+		i1++;
 	}
 	//dim led green
 	if (TMR4IF == 1)
 	{											// if timer4 postscaler flag is set
-		TMR4IF = 0;								// clear it and call dim function
-		green_p = &color.green;
-		wait2_p = &wait2;
-		updown2_p = &updown2;
-		dim_color(updown2_p, wait2_p, green_p);		
+		TMR4IF = 0;								// clear it
+		//slow down dim mode as set while programming
+		if (i2 == control.dim_mode_speed)
+		{	
+			green_p = &color.green;
+			wait2_p = &wait2;
+			updown2_p = &updown2;
+			//call dim function
+			dim_color(updown2_p, wait2_p, green_p);	
+			i2 = 0;
+		}	
+		i2++;
 	}
 	//dim led blue
 	if (TMR6IF == 1)							// if timer6 postscaler flag is set
-	{							
+	{		
 		TMR6IF = 0;								// clear it and call dim function
-		updown3_p = &updown3;
-		wait3_p = &wait3;
-		blue_p = &color.blue;
-		dim_color(updown3_p, wait3_p, blue_p);
+		//slow down dim mode as set while programming
+		if (i3 == control.dim_mode_speed)
+		{					
+			updown3_p = &updown3;
+			wait3_p = &wait3;
+			blue_p = &color.blue;
+			//call dim funtion
+			dim_color(updown3_p, wait3_p, blue_p);
+			i3 = 0;
+		}
+		i3++;
 	}
 }
 
+/*
+dim works as state machine => dim up => remain there for random time => dim down => remain there for random time =|
+						   |______________________________________________________________________________________|
+gets: pointers
+*/
 static void dim_color(char *pupdown, char *pwait, char *pcolor)
 {
 	switch (*pupdown)						// test if brightness should be increased =0 or decreased =1 or should remain constant >1
@@ -194,6 +231,7 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 		}
 		case (2) :
 		{
+			//state2 is not used, so no waiting time at maximum brightness. creation of waiting time has to be interchanged when using this
 			//*pwait = *pwait - 1;				// block until wait == 0
 		//	if (*pwait == 0)					// returns to dimming operation and resets waiting timer
 		//	{
@@ -209,12 +247,16 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 			if (*pwait == 0)					// returns to dimming operation and resets waiting timer
 			{
 				*pupdown = 0;
-				*pwait = rand();				// creates random number
-				*pwait = *pwait | 0b00011111;	// random number is at least 63
+				// random number is at least 63
+				do
+				{
+					//*pwait = rand();			// creates random number
+					*pwait = TMR1L;				// reading timer value at random time instead of rand() function saves 5% program memory
+				}
+				while (*pwait < 63);
 			}
 			break;
 		}
-
 	}
 	// as color brightness and off time is set randomly, it is possilble that all colors are off. So we start dimming up instantly
 	if (color.colors == 0)
@@ -226,7 +268,6 @@ static void dim_color(char *pupdown, char *pwait, char *pcolor)
 
 /*
 Switches to standby 
-todo: implementieren, was ich in der Hardware hinbekomme
 - Dims off all colors when off
 - Restores all colors when switched on (todo:)
 */
@@ -503,13 +544,13 @@ void func_colorselect(void)
 	control.function = IDLE;
 }
 
-
-
-
-
+/*
+fades color from momentary value to desigred value
+*/
 void func_fadecolor(void)
 {
-	TMR1ON = 1;
+	//here timer1 is used as timer
+	TMR1ON = 1;				
 	if (TMR1 > 400)
 	{
 		

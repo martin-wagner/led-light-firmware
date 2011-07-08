@@ -2,7 +2,7 @@
 #include "IO.h"
 #include "sevenseg.h"
 
-//Bitfeld 7seg Anzeige
+//Bits 7seg display
 union T7seg
 {
 	char segments;
@@ -15,7 +15,7 @@ union T7seg
 		char sege:1;
 		char segf:1;
 		char segg:1;
-		char segh:1; //not used
+		char dp:1;   //not used
 	};		
 };
 
