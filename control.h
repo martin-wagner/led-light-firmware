@@ -19,7 +19,7 @@ struct Tcontrol
 	char color_button;
 	// EEPROM pointer in here is not a C Pointer !!!
 	int eepointer;
-	//Stores the factor for brightness
+	//Stores the factor for brightness (0..100)
 	int brightness_factor;
 } control;
 
@@ -47,13 +47,14 @@ union Tcolor
 // functions (numbers are randomly selected)
 #define FUNC_POWER 10						
 #define FUNC_COLOR 11
-#define FUNC_BRIGHT 12
+#define FUNC_COLOR_SET 12
 #define FUNC_PROGRAM 13
 #define FUNC_COLORSONOFF 14
 #define FUNC_COLOR_SELECT 16							//stores which color button has been pressed last
 #define FUNC_WHITEONOFF 17
 #define FUNC_MEMORY 18
 #define FUNC_FADING 19
+#define FUNC_BRIGHT 20
 #define IDLE 0xff
 
 

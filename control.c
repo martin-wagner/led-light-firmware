@@ -68,11 +68,11 @@ void set_function(void)
 		{
 			control.function = FUNC_COLOR;
 		}
-		// inc/dec brightness buttons
-		test = ((command == CMD_BRIGHTDEC) || (command == CMD_BRIGHTINC));
+		// inc/dec color brightness buttons
+		test = ((command == CMD_LEFT) || (command == CMD_RIGHT));
 		if (test == 1)
 		{
-			control.function = FUNC_BRIGHT;
+			control.function = FUNC_COLOR_SET;
 		}
 		// +/- Program Buttons
 		test = ((command == CMD_PROGRAMDEC) || (command == CMD_PROGRAMINC));
@@ -96,6 +96,12 @@ void set_function(void)
 		{
 			control.function = FUNC_WHITEONOFF;
 		}	
+		// inc/dec brightness buttons
+		test = ((command == CMD_BRIGHTDEC) || (command == CMD_BRIGHTINC));
+		if (test == 1)
+		{
+			control.function = FUNC_BRIGHT;
+		}
 		// color storate function
 		if (command == CMD_MEMORY)
 		{
@@ -126,7 +132,7 @@ void mode_dim(void)
 		red_p = &color.red;
 		wait1_p = &wait1;
 		updown1_p = &updown1;				
-		dim_color(updown1_p, wait1_p, red_p);				
+		dim_color(updown1_p, wait1_p, red_p);	
 	}
 	//dim led green
 	if (TMR4IF == 1)
@@ -343,7 +349,7 @@ static void bright_color(char *pcolor)
 	int color;
 	color = *pcolor;
 	// increase brightness
-	if (rc5.command == CMD_BRIGHTINC)
+	if (rc5.command == CMD_RIGHT)
 	{
 		if (rc5.speed == FAST)
 		{	
@@ -355,7 +361,7 @@ static void bright_color(char *pcolor)
 		}
 	}
 	// decrease brightness
-	if (rc5.command == CMD_BRIGHTDEC)
+	if (rc5.command == CMD_LEFT)
 	{
 		if (rc5.speed == FAST)
 		{	
@@ -445,7 +451,7 @@ void fuc_colorsonoff(void)
 }
 
 /*
-Switches on/off white. Works the same way as white
+Switches on/off white. Works the same way as colors
 */
 void fuc_whiteonoff(void)
 {

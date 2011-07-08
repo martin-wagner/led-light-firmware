@@ -100,3 +100,4 @@ command - 6 bits
 #define CMD_MEMORY 			0b00100000
 //cancel
 #define CMD_CANCEL 			0b00101101
+

@@ -10,7 +10,7 @@
 //*****************************
 
 // Control and Color data (used at the very first start)
-__EEPROM_DATA(11, 0, 8, 88, 100, 0, 0, 0);				// (0)
+__EEPROM_DATA(11, 0, 13, 88, 100, 0, 0, 0);				// (0)
 __EEPROM_DATA(255, 127, 63, 32, 0, 0, 0, 0);			// (8)		
 // Reserve
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (16)
@@ -77,8 +77,8 @@ Memory Map:
 Byte 0: control.mode
 Byte 1: control.function
 Byte 2: control.color_button (not really neccesary...)
-Byte 4: control.eepointer (lowbyte)
-Byte 5: control.brighntess_factor (lowbyte)
+Byte 3: control.eepointer (lowbyte)
+Byte 4: control.brighntess_factor (lowbyte)
 Byte 8: color.red
 Byte 9: color.green
 Byte 10: color.blue
