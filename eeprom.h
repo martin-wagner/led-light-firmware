@@ -9,17 +9,17 @@ extern void write_byte(char adr, char byte);
 //******************
 #define EE_RUNDATA 0
 #define EE_RED 40
-#define EE_GREEN 44
-#define EE_DARKBLUE 48
+#define EE_YELLOW 44
+#define EE_BLUE 48
 #define EE_DARKORANGE 52
-#define EE_DARKGREEN 56
+#define EE_GREEN 56
 #define EE_PURPLE 60
 #define EE_ORANGE 64
 #define EE_TURQUOISE 68
 #define EE_PINK 72
-#define EE_YELLOW 76
-#define EE_BLUE 80
-#define EE_BROWN 84
+#define EE_WARMWHITE 76
+#define EE_COOLWHITE 80
+#define EE_DAYLIGHT 84
 #define EE_PROG0 88
 #define EE_PROG1 96
 #define EE_PROG2 104

@@ -47,13 +47,13 @@ command - 6 bits
 //red
 #define CMD_RED 			0b00001000
 //green
-#define CMD_GREEN 			0b00000010
+#define CMD_YELLOW 			0b00000010
 //dark blue
-#define CMD_DARKBLUE 		0b00000011
+#define CMD_BLUE	 		0b00000011
 //dark orange
 #define CMD_DARKORANGE 		0b00000100
 //dark green
-#define CMD_DARKGREEN 		0b00000101
+#define CMD_GREEN 			0b00000101
 //purple
 #define CMD_PURPLE 			0b00000110
 //orange
@@ -63,11 +63,11 @@ command - 6 bits
 //pink
 #define CMD_PINK 			0b00001001
 //yellow
-#define CMD_YELLOW 			0b00001110
+#define CMD_WARMWHITE		0b00001110
 //blue
-#define CMD_BLUE 			0b00000000
+#define CMD_COOLWHITE		0b00000000
 //brown
-#define CMD_BROWN			0b00101100
+#define CMD_DAYLIGHT		0b00101100
 //bright -
 #define CMD_BRIGHTDEC 		0b00110011
 //bright +

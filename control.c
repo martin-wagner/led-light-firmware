@@ -6,12 +6,14 @@
 #include "IO.h"
 #include "sevenseg.h"
 
-static void dim_color(char *pupdown, char *pwait, int *pcolor);
+static void dim_color(char *pupdown, int *pwait, int *pcolor);
 static void bright_color(int *pcolor);
 static void bright_factor(char *pfactor);
 
 //time to display something on the 7seg
 static char display_on;
+//prescale factor for dimming timers
+#define PRESCALE 31
 
 /*
 Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
@@ -31,17 +33,17 @@ void set_mode(void)
 	else if ((command == CMD_OK) && (control.mode == MANUAL))
 	{
 		control.mode = DIM;
-		display_on = 30;
+		display_on = 60;
 	}
 	else
 	{
 		// enable manual mode if current mode is dim and one of the following buttons is pressed:
 		// OK, Power, a Color Button, Program +-. All other buttons are ignored
 		// todo: geht das wirklich nur so??
-		test = ((command == CMD_OK) || (command == CMD_POWER) || (command == CMD_RED) || (command == CMD_GREEN) || 
-				(command == CMD_DARKBLUE) || (command == CMD_DARKORANGE) || (command == CMD_DARKGREEN) || (command == CMD_PURPLE) 
-				|| (command == CMD_ORANGE) || (command == CMD_TURQUOISE) || (command == CMD_PINK) || (command == CMD_YELLOW) 
-				|| (command == CMD_BLUE) || (command == CMD_BROWN) || (command == CMD_PROGRAMDEC) || (command == CMD_PROGRAMINC));
+		test = ((command == CMD_OK) || (command == CMD_POWER) || (command == CMD_RED) || (command == CMD_YELLOW) || 
+				(command == CMD_BLUE) || (command == CMD_DARKORANGE) || (command == CMD_GREEN) || (command == CMD_PURPLE) 
+				|| (command == CMD_ORANGE) || (command == CMD_TURQUOISE) || (command == CMD_PINK) || (command == CMD_WARMWHITE) 
+				|| (command == CMD_COOLWHITE) || (command == CMD_DAYLIGHT) || (command == CMD_PROGRAMDEC) || (command == CMD_PROGRAMINC));
 		test = (test && (control.mode == DIM));
 		if (test == 1)
 		{
@@ -73,9 +75,9 @@ void set_function(void)
 			control.function = FUNC_POWER;
 		}
 		// color button function
-		test = ((command == CMD_RED) || (command == CMD_GREEN) || (command == CMD_DARKBLUE) || (command == CMD_DARKORANGE) || 
-				(command == CMD_DARKGREEN) || (command == CMD_PURPLE) || (command == CMD_ORANGE) || (command == CMD_TURQUOISE) 
-				|| (command == CMD_PINK) || (command == CMD_YELLOW) || (command == CMD_BLUE) || (command == CMD_BROWN));
+		test = ((command == CMD_RED) || (command == CMD_YELLOW) || (command == CMD_BLUE) || (command == CMD_DARKORANGE) || 
+				(command == CMD_GREEN) || (command == CMD_PURPLE) || (command == CMD_ORANGE) || (command == CMD_TURQUOISE) 
+				|| (command == CMD_PINK) || (command == CMD_WARMWHITE) || (command == CMD_COOLWHITE) || (command == CMD_DAYLIGHT));
 		if (test == 1)
 		{
 			control.function = FUNC_COLOR;
@@ -134,75 +136,94 @@ Starts dim mode.
 */
 void mode_dim(void)
 {
-	static char updown1, updown2, updown3, i1, i2, i3, wait1, wait2, wait3;
-	char *updown1_p, *updown2_p, *updown3_p, *wait1_p, *wait2_p, *wait3_p;
-	int *red_p, *green_p, *blue_p;
+	static char updown1, updown2, updown3, i1, i2, i3, s1, s2, s3;
+	char *updown1_p, *updown2_p, *updown3_p;
+	int wait1, wait2, wait3;
+	int *red_p, *green_p, *blue_p, *wait1_p, *wait2_p, *wait3_p;
 	//timer1 here is used to create radom numbers
 	TMR1ON = 1;
 	//dim red
 	if (TMR2IF == 1)							// if timer2 postscaler flag is set
-	{	
+	{
 		TMR2IF = 0;								// clear it
-		/*nothing to do with red, but doing it here saves a timer
-		this slowly dims off white when starting dim mode
-		*/
-		if (color.white	!= 0)
-		{
-			color.white--;
+		//prescale frequency
+		if (s1 > PRESCALE)
+		{			
+			/*nothing to do with red, but doing it here saves a timer
+			this slowly dims off white when starting dim mode
+			*/
+			if (color.white	!= 0)
+			{
+				color.white--;
+			}
+			//this shows letter "d" for a short time to indicate dim mode
+			if (display_on != 0)
+			{
+				display_on --;
+				lookup(SD);
+			}
+			else
+			{
+				lookup(S0);
+			}
+			//slow down dim speed as set in programming mode
+			if (i1 == control.dim_mode_speed)
+			{		
+				red_p = &color.red;
+				wait1_p = &wait1;
+				updown1_p = &updown1;
+				//call dim function				
+				dim_color(updown1_p, wait1_p, red_p);	
+				i1 = 0;
+			}
+			i1 ++;
+			s1 = 0;
 		}
-		//this shows letter "d" for a short time to indicate dim mode
-		if (display_on != 0)
-		{
-			display_on --;
-			lookup(SD);
-		}
-		else
-		{
-			lookup(S0);
-		}
-		//slow down dim mode as set while programming
-		if (i1 == control.dim_mode_speed)
-		{		
-			red_p = &color.red;
-			wait1_p = &wait1;
-			updown1_p = &updown1;
-			//call dim function				
-			dim_color(updown1_p, wait1_p, red_p);	
-			i1 = 0;
-		}
-		i1++;
+		s1 ++;
 	}
 	//dim led green
 	if (TMR4IF == 1)
 	{											// if timer4 postscaler flag is set
 		TMR4IF = 0;								// clear it
-		//slow down dim mode as set while programming
-		if (i2 == control.dim_mode_speed)
+		//prescale frequency
+		if (s2 > PRESCALE)
 		{	
-			green_p = &color.green;
-			wait2_p = &wait2;
-			updown2_p = &updown2;
-			//call dim function
-			dim_color(updown2_p, wait2_p, green_p);	
-			i2 = 0;
-		}	
-		i2++;
+			//slow down dim mode as set while programming
+			if (i2 == control.dim_mode_speed)
+			{	
+				green_p = &color.green;
+				wait2_p = &wait2;
+				updown2_p = &updown2;
+				//call dim function
+				dim_color(updown2_p, wait2_p, green_p);	
+				i2 = 0;
+			}	
+			i2++;
+			s2 = 0;
+		}
+		s2 ++;
 	}
 	//dim led blue
 	if (TMR6IF == 1)							// if timer6 postscaler flag is set
 	{		
 		TMR6IF = 0;								// clear it and call dim function
-		//slow down dim mode as set while programming
-		if (i3 == control.dim_mode_speed)
-		{					
-			updown3_p = &updown3;
-			wait3_p = &wait3;
-			blue_p = &color.blue;
-			//call dim funtion
-			dim_color(updown3_p, wait3_p, blue_p);
-			i3 = 0;
+		//prescale frequency
+		if (s3 > PRESCALE)
+		{	
+			//slow down dim mode as set while programming
+			if (i3 == control.dim_mode_speed)
+			{	
+				blue_p = &color.blue;
+				wait3_p = &wait3;				
+				updown3_p = &updown3;
+				//call dim funtion
+				dim_color(updown3_p, wait3_p, blue_p);
+				i3 = 0;
+			}
+			i3++;
+			s3 = 0;
 		}
-		i3++;
+		s3 ++;
 	}
 }
 
@@ -211,7 +232,7 @@ dim works as state machine => dim up => remain there for random time => dim down
 						   |______________________________________________________________________________________|
 gets: pointers
 */
-static void dim_color(char *pupdown, char *pwait, int *pcolor)
+static void dim_color(char *pupdown, int *pwait, int *pcolor)
 {
 	char i;
 	switch (*pupdown)						// test if brightness should be increased =0 or decreased =1 or should remain constant >1
@@ -255,29 +276,29 @@ static void dim_color(char *pupdown, char *pwait, int *pcolor)
 		case (3) :
 		{
 			*pwait = *pwait - 1;				// block until wait == 0
-			if (*pwait == 0)					// returns to dimming operation and resets waiting timer
+			if (*pwait <= 0)					// returns to dimming operation and resets waiting timer
 			{
 				*pupdown = 0;
-				// random number is at least 63
+				// random number is at least 200
 				do
 				{
-					//random delay if wait < 63
+					//random delay if wait < 200
 					for (i = 0; i < *pwait; i++);
-		//			*pwait = rand();			// creates random number
-					*pwait = TMR1L;				// reading timer value at random time instead of rand() function saves 5% program memory
-		//			wait = *pwait;
-		//			write_byte(16, wait);
+				//	*pwait = rand();			// creates random number
+					*pwait = TMR1;				// reading timer value at random time instead of rand() function saves 5% program memory
+					*pwait = *pwait & 0x7ff;	// maximum number is 2047
 				}
-				while (*pwait < 63);
+				while (*pwait < 200);
 			}
 			break;
 		}
 	}
-	// as color brightness and off time is set randomly, it is possilble that all colors are off. So we start dimming up instantly
-	if ((color.red == 0 ) && (color.green == 0) && (color.blue == 0))
+	// as color brightness and off time is set randomly, it is possilble that all colors are off. In this case we start dimming up instantly
+	if ((color.red < 3 ) && (color.green < 3) && (color.blue < 3))
 	{
-		*pcolor = 2;
+		*pcolor = 3;
 		*pupdown = 0;
+
 	}
 }
 
@@ -310,14 +331,14 @@ void func_color(void)
 			read_color(EE_RED);
 			break;
 		}
-		case CMD_GREEN:
+		case CMD_YELLOW:
 		{
-			read_color(EE_GREEN);			
+			read_color(EE_YELLOW);			
 			break;
 		}
-		case CMD_DARKBLUE:
+		case CMD_BLUE:
 		{
-			read_color(EE_DARKBLUE);		
+			read_color(EE_BLUE);		
 			break;
 		}
 		case CMD_DARKORANGE:
@@ -325,9 +346,9 @@ void func_color(void)
 			read_color(EE_DARKORANGE);			
 			break;
 		}
-		case CMD_DARKGREEN:
+		case CMD_GREEN:
 		{
-			read_color(EE_DARKGREEN);			
+			read_color(EE_GREEN);			
 			break;
 		}
 		case CMD_PURPLE:
@@ -350,19 +371,19 @@ void func_color(void)
 			read_color(EE_PINK);		
 			break;
 		}
-		case CMD_YELLOW:
+		case CMD_WARMWHITE:
 		{
-			read_color(EE_YELLOW);	
+			read_color(EE_WARMWHITE);	
 			break;
 		}
-		case CMD_BLUE:
+		case CMD_COOLWHITE:
 		{
-			read_color(EE_BLUE);
+			read_color(EE_COOLWHITE);
 			break;
 		}
-		case CMD_BROWN:
+		case CMD_DAYLIGHT:
 		{
-			read_color(EE_BROWN);		
+			read_color(EE_DAYLIGHT);		
 			break;
 		}
 	}
@@ -567,7 +588,7 @@ void func_fadecolor(void)
 {
 	//here timer1 is used as timer
 	TMR1ON = 1;				
-	if (TMR1 > 150)
+	if (TMR1 > 1000)
 	{
 		
 		TMR1 = 0;

@@ -19,24 +19,24 @@ __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (24)
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (32)
 
 // colors  	(   R  G  B  W  R   G   B  W )				// block start adress
-__EEPROM_DATA(255, 7, 0, 5, 2, 255, 2, 5);				// (40) red, green
-__EEPROM_DATA(3, 3, 150, 0, 180, 20, 0, 0);				// (48) darkblue, darkorange
-__EEPROM_DATA(1, 150, 1, 0, 80, 0, 150, 2);				// (56) darkgreen, purple
-__EEPROM_DATA(255, 50, 0, 5, 0, 255, 100, 2);			// (64) orange, turquoise
-__EEPROM_DATA(180, 0, 180, 30, 255, 200, 2, 5);			// (72) pink, yellow			
-__EEPROM_DATA(0, 30, 255, 30, 100, 50, 50, 0);			// (80) blue, brown
+__EEPROM_DATA(255, 8, 0, 3, 175, 255, 0, 5);			// (40) red, yellow 
+__EEPROM_DATA(0, 0, 255, 0, 255, 150, 2, 5);			// (48) blue, darkorange
+__EEPROM_DATA(9, 255, 2, 3, 80, 0, 150, 2);				// (56) green, purple
+__EEPROM_DATA(208, 160, 0, 3, 0, 255, 48, 3);			// (64) orange, turquoise
+__EEPROM_DATA(180, 0, 180, 13, 192, 192, 0, 255);		// (72) pink, warm white			
+__EEPROM_DATA(32, 32, 0, 255, 16, 80, 112, 255);		// (80) cool white, daylight
 // programmable colors (defaults)
-//   		( R  G    B   W   bright), brightness is not used at the moment
-__EEPROM_DATA(0, 20, 50, 255, 255, 0, 0, 0);			// (88) daylight
-__EEPROM_DATA(5, 0, 0, 255, 255, 0, 0, 0);				// (96) cool white
-__EEPROM_DATA(50, 30, 0, 255, 255, 0, 0, 0);			// (104)warm white 
-__EEPROM_DATA(70, 40, 0, 255, 255, 0, 0, 0);			// (112)warm white 2
-__EEPROM_DATA(100, 50, 0, 255, 50, 0, 0, 0);			// (120)
-__EEPROM_DATA(63, 63, 63, 63, 255, 0, 0, 0);			// (128)
-__EEPROM_DATA(127, 127, 127, 127, 255, 0, 0, 0);		// (136)
-__EEPROM_DATA(255, 255, 255, 255, 75, 0, 0, 0);	    	// (144)
-__EEPROM_DATA(255, 255, 255, 255, 175, 0, 0, 0);		// (152)
-__EEPROM_DATA(255, 255, 255, 255, 255, 0, 0, 0);		// (160)
+//   		( R    G  B   W   bright), brightness is not used at the moment
+__EEPROM_DATA(255, 8, 0, 60, 255, 0, 0, 0);				// (88) bright red
+__EEPROM_DATA(0, 30, 255, 40, 255, 0, 0, 0);			// (96) bright blue
+__EEPROM_DATA(9, 255, 2, 40, 255, 0, 0, 0);				// (104) bright green
+__EEPROM_DATA(0, 255, 48, 15, 255, 0, 0, 0);			// (112) bright turquoise
+__EEPROM_DATA(40, 50, 0, 0, 255, 0, 0, 0);				// (120) dark yellow
+__EEPROM_DATA(5, 50, 0, 0, 255, 0, 0, 0);				// (128) dark green
+__EEPROM_DATA(50, 5, 0, 0, 255, 0, 0, 0);				// (136) dark red
+__EEPROM_DATA(0, 0, 25, 0, 255, 0, 0, 0);	    		// (144) dark blue
+__EEPROM_DATA(255, 255, 255, 255, 255, 0, 0, 0);		// (152) all on
+__EEPROM_DATA(130, 130, 0, 255, 255, 0, 0, 0);			// (160) startup color 
 
 /*
 //DO NOT CHANGE, for new use unused bytes!!!
@@ -196,5 +196,10 @@ void load_eeprom(void)
 			color = color_desigred;
 			break;
 		}	
+	}
+	//check if we have all LEDs switched off in loaded color for any reason
+	if ((color.red || color.green || color.blue || color.white) == 0)
+	{
+		color.white = 100;
 	}
 }

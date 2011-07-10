@@ -30,7 +30,7 @@ void program(void)
 	//if cancel is pressed, exit program mode. This is done by going to the "finish" state
 	if (rc5.command == CMD_CANCEL)
 	{
-		state = 24;
+		goto end;
 	}
 	//if program button is pressed, go one step further and delete command
 	if (rc5.command == CMD_PROGRAM)
@@ -285,7 +285,7 @@ void program(void)
 		case 24:
 		{
 			//clear display
-			lookup(S0);
+end:		lookup(S0);
 			//finish programming
 			control.mode = MANUAL;
 			control.function = IDLE;

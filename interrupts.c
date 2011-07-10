@@ -25,7 +25,7 @@ void interrupt isr(void)
 		LED_RECEIVE = 1;						// set receiving LED
 		//set up parameters to start reading of the command frame sent by the remote.
 		//timer0 delays until we are somewhere in the middle of the next rc5 half data bit
-		TMR0 = 0x00;							
+		TMR0 = 80;							
 		TMR0IF = 0;								
 		TMR0IE = 1;
 		parity = 0;								// clear the parity bit
@@ -40,7 +40,10 @@ void interrupt isr(void)
 		//one RC5 frame in manchester coding is 26 bit long (start is not stored), therefore we rotate 26 bits (0...25) into rc5_data register 
 		if (n < 26)
 		{
-			TMR0 = 0x28;						// start new wait period. Delay time ~0,9 ms at 4 MHz. todo: tweak here if remote doesn't work properly, values 23..33 might work, depends on precision of internal oscillator
+			/* start new wait period. Delay time should be ~0,9 ms. todo: tweak here if remote doesn't work properly.
+			 * 0.9ms = 144 + x, values 140..150 might work, depends on precision of internal oscillator and mostly on remote
+			 */
+			TMR0 = 146;						
 			bit_read = IR_IN;					// store the read bit in memory to be independend from changes on the actual port pin
 			//create parity. As manchester code is DC free, after one complete frame result must be 0. Otherwise frame invalid
 			if (bit_read == 1)
