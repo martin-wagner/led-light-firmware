@@ -12,8 +12,6 @@ static void bright_factor(char *pfactor);
 
 //time to display something on the 7seg
 static char display_on;
-//prescale factor for dimming timers
-#define PRESCALE 31
 
 /*
 Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
@@ -33,7 +31,7 @@ void set_mode(void)
 	else if ((command == CMD_OK) && (control.mode == MANUAL))
 	{
 		control.mode = DIM;
-		display_on = 60;
+		display_on = 30;
 	}
 	else
 	{
@@ -136,7 +134,7 @@ Starts dim mode.
 */
 void mode_dim(void)
 {
-	static char updown1, updown2, updown3, i1, i2, i3, s1, s2, s3;
+	static char updown1, updown2, updown3, i1, i2, i3;
 	char *updown1_p, *updown2_p, *updown3_p;
 	int wait1, wait2, wait3;
 	int *red_p, *green_p, *blue_p, *wait1_p, *wait2_p, *wait3_p;
@@ -146,84 +144,66 @@ void mode_dim(void)
 	if (TMR2IF == 1)							// if timer2 postscaler flag is set
 	{
 		TMR2IF = 0;								// clear it
-		//prescale frequency
-		if (s1 > PRESCALE)
-		{			
-			/*nothing to do with red, but doing it here saves a timer
-			this slowly dims off white when starting dim mode
-			*/
-			if (color.white	!= 0)
-			{
-				color.white--;
-			}
-			//this shows letter "d" for a short time to indicate dim mode
-			if (display_on != 0)
-			{
-				display_on --;
-				lookup(SD);
-			}
-			else
-			{
-				lookup(S0);
-			}
-			//slow down dim speed as set in programming mode
-			if (i1 == control.dim_mode_speed)
-			{		
-				red_p = &color.red;
-				wait1_p = &wait1;
-				updown1_p = &updown1;
-				//call dim function				
-				dim_color(updown1_p, wait1_p, red_p);	
-				i1 = 0;
-			}
-			i1 ++;
-			s1 = 0;
+		/*nothing to do with red, but doing it here saves a timer
+		this slowly dims off white when starting dim mode
+		*/
+		if (color.white	!= 0)
+		{
+			color.white--;
 		}
-		s1 ++;
+		//this shows letter "d" for a short time to indicate dim mode
+		if (display_on != 0)
+		{
+			display_on --;
+			lookup(SD);
+		}
+		else
+		{
+			lookup(S0);
+		}
+		//slow down dim speed as set in programming mode
+		if (i1 == control.dim_mode_speed)
+		{		
+			red_p = &color.red;
+			wait1_p = &wait1;
+			updown1_p = &updown1;
+			//call dim function				
+			dim_color(updown1_p, wait1_p, red_p);	
+			i1 = 0;
+		}
+		i1 ++;
 	}
 	//dim led green
 	if (TMR4IF == 1)
 	{											// if timer4 postscaler flag is set
-		TMR4IF = 0;								// clear it
-		//prescale frequency
-		if (s2 > PRESCALE)
+		TMR4IF = 0;								// clear it	
+		//slow down dim mode as set while programming
+		if (i2 == control.dim_mode_speed)
 		{	
-			//slow down dim mode as set while programming
-			if (i2 == control.dim_mode_speed)
-			{	
-				green_p = &color.green;
-				wait2_p = &wait2;
-				updown2_p = &updown2;
-				//call dim function
-				dim_color(updown2_p, wait2_p, green_p);	
-				i2 = 0;
-			}	
-			i2++;
-			s2 = 0;
-		}
-		s2 ++;
+			green_p = &color.green;
+			wait2_p = &wait2;
+			updown2_p = &updown2;
+			//call dim function
+			dim_color(updown2_p, wait2_p, green_p);	
+			i2 = 0;
+		}	
+		i2++;
 	}
 	//dim led blue
 	if (TMR6IF == 1)							// if timer6 postscaler flag is set
 	{		
 		TMR6IF = 0;								// clear it and call dim function
-		//prescale frequency
-		if (s3 > PRESCALE)
+		//slow down dim mode as set while programming
+		if (i3 == control.dim_mode_speed)
 		{	
-			//slow down dim mode as set while programming
-			if (i3 == control.dim_mode_speed)
-			{	
-				blue_p = &color.blue;
-				wait3_p = &wait3;				
-				updown3_p = &updown3;
-				//call dim funtion
-				dim_color(updown3_p, wait3_p, blue_p);
-				i3 = 0;
-			}
-			i3++;
-			s3 = 0;
+			blue_p = &color.blue;
+			wait3_p = &wait3;				
+			updown3_p = &updown3;
+			//call dim funtion
+			dim_color(updown3_p, wait3_p, blue_p);
+			i3 = 0;
 		}
-		s3 ++;
+		i3++;
 	}
 }
 
@@ -282,8 +262,8 @@ static void dim_color(char *pupdown, int *pwait, int *pcolor)
 				// random number is at least 200
 				do
 				{
-					//random delay if wait < 200
-					for (i = 0; i < *pwait; i++);
+					//random delay if wait < 200. At first loop run, pwait should be 0
+					for (i = 0; i <= *pwait; i++);
 				//	*pwait = rand();			// creates random number
 					*pwait = TMR1;				// reading timer value at random time instead of rand() function saves 5% program memory
 					*pwait = *pwait & 0x7ff;	// maximum number is 2047
@@ -588,9 +568,8 @@ void func_fadecolor(void)
 {
 	//here timer1 is used as timer
 	TMR1ON = 1;				
-	if (TMR1 > 1000)
+	if (TMR1 > 150)
 	{
-		
 		TMR1 = 0;
 		// we have to dim up or down a color to get to the new brightness. nothing is done if equal. else statement would include equal!
 		//red

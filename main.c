@@ -198,20 +198,20 @@ initialization process
 */
 void init(void)
 {
-	//set up oscillator for 32 MHz operation. Program flow doesn't need this speed, but otherwise 20 kHz PWM frequency is not possible
 	/*
-     // ----------------------------------------------------------
-     // Configure oscillator for 32MHz operation
-     // ----------------------------------------------------------
-     // Bit    <7>       : PLL enabled via config word i.e. <0>
-     // Bits  <6-3>    : 32MHz operation i.e. <1110>
-     // Bit    <2>       : Unimplemented i.e. <0>
-     // Bit    <1:0>    : Let config word select oscillator i.e. <00>
-     // ----------------------------------------------------------
+	Alignment of Bits: bit 7 ... bit 0
 	*/
-    OSCCON = 0x70;
 	
-	//set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 00 and reset 255 => 32 kHz.
+	//set up oscillator for 4 MHz operation.
+	OSCCON = 0b11101010;						
+	
+	/* 
+	set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 16 and reset 255 => 250 Hz. 
+	*/
+
+	//todo: bekomme ich mein Einschaltflackern weg, wenn ich hier die IOs gleich richtig schalte?
+
+
 	//switch all io to input
 	TRISA = 0xff;
 	TRISB = 0xff;	
@@ -227,9 +227,9 @@ void init(void)
 	TMRxON = 1
 	TxCKPS = 00 prescaler off
 	*/
-	T2CON = 0b1101100;								// timer on, prescaler; postscaler for dimming speed (slow)
-	T4CON = 0b1110100;								// dimming speed medium
-	T6CON = 0b1111100;								// dimming speed fast. slow, medium and fast are only slightly different and support random while dimming
+	T2CON = 0b0101110;								// timer on, prescaler; postscaler for dimming speed (slow)
+	T4CON = 0b0110110;								// dimming speed medium
+	T6CON = 0b0111110;								// dimming speed fast. slow, medium and fast are only slightly different and support random while dimming
 	PR2 = 0xff;										// timer reset value (pwm period length, for max. resolution must be 0xff)
 	PR4 = 0xff;
 	PR6 = 0xff;
@@ -264,12 +264,12 @@ void init(void)
 	/*
 	ADCON1
 	ADFM = 1 right adjust result
-	ADCS = 110 F ADC = Fosc/64
+	ADCS = 101 F ADC = Fosc/16
 	bit 4 = 0
 	ADNREF = 0 neg ref = Vss
 	ADPREF = 00 Vref = Vdd
 	*/
-	ADCON1 = 0b11100000;
+	ADCON1 = 0b11010000;
 
 	//set up timer 1 (used for color fading between different fuctions)
 	/*
@@ -292,10 +292,10 @@ void init(void)
 	TMR0CS = 0;
 	//PSA 0 = Prescaler is assigned to the Timer0 module
 	PSA = 0;
-	//PS 001 = Prescaler 64
+	//PS 001 = Prescaler 4
 	PS0 = 1;
 	PS1 = 0;
-	PS2 = 1;
+	PS2 = 0;
 
 	/*set up interrupts
 	GIE 0 = Disables all interrupts
