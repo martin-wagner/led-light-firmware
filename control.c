@@ -283,18 +283,42 @@ static void dim_color(char *pupdown, int *pwait, int *pcolor)
 }
 
 /*
-Switches to standby 
-- Dims off all colors when off
-- Restores all colors when switched on (todo:)
+Switches on/off colors. When off, values are stored, when back on, they are restored.
+If we have left off mode since switching off, the momentary color values are stored (function has to be called a 2nd time to do this)
+and the old ones are lost.
 */
 void onoff(void)
 {
-	//all colors off
-	color_desigred.red = 0;
-	color_desigred.green = 0;
-	color_desigred.blue = 0;
-	color_desigred.white = 0;
-	control.function = FUNC_FADING;
+	static bit toggle;
+	static int red, green, blue, white;
+	// if power on, store momentary values and dim them off.
+	if (toggle == 0)
+	{
+		red = color.red;
+		green = color.green;
+		blue = color.blue;
+		white = color.white;
+		color_desigred.red = 0;
+		color_desigred.green = 0;
+		color_desigred.blue = 0;
+		color_desigred.white = 0;
+		control.function = FUNC_FADING;
+	}
+	// if power off, restore values.
+	else
+	{
+		// test if we are still in off mode. If not, the main program has to call onoff again to store momentary 
+		// values (therefore fading is only set when one if statement is processed, otherwise it remains at colorsonoff)
+		if ((color.red || color.green || color.blue || color.white) == 0)
+		{
+			color_desigred.red = red;
+			color_desigred.green = green;
+			color_desigred.blue = blue;
+			color_desigred.white = white;
+			control.function = FUNC_FADING;
+		}
+	}
+	toggle = ~toggle;
 }
 
 /*
