@@ -689,9 +689,9 @@ static void bright_factor(char *pfactor)
 		}
 	}
 	// fit computed result back into char limits
-	if (factor < 0)
+	if (factor < 1)
 	{
-		factor = 0;
+		factor = 1;
 	}
 	if (factor > 0xff)
 	{
