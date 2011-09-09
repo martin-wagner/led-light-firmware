@@ -476,9 +476,6 @@ static void bright_color(int *pcolor)
 	*pcolor = color;
 }
 
-
-
-
 void fucn_program(void)
 {
 	// load programmed colors from eeprom. 
@@ -498,7 +495,6 @@ void fucn_program(void)
 		{
 			control.eepointer = EE_MAXPROG;
 		}		
-
 	}
 	read_color(control.eepointer);	
 	control.function = FUNC_FADING;
@@ -688,7 +684,7 @@ static void bright_factor(char *pfactor)
 			factor--;
 		}
 	}
-	// fit computed result back into char limits
+	// fit computed result back into char limits. By using "1", dimming "off" is not possible.
 	if (factor < 1)
 	{
 		factor = 1;

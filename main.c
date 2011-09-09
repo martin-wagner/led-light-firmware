@@ -208,10 +208,6 @@ void init(void)
 	/* 
 	set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 16 and reset 255 => 250 Hz. 
 	*/
-
-	//todo: bekomme ich mein Einschaltflackern weg, wenn ich hier die IOs gleich richtig schalte?
-
-
 	//switch all io to input
 	TRISA = 0xff;
 	TRISB = 0xff;	

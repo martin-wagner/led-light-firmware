@@ -19,11 +19,11 @@ __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (24)
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (32)
 
 // colors  	(   R  G  B  W  R   G   B  W )				// block start adress
-__EEPROM_DATA(255, 8, 0, 3, 175, 255, 0, 5);			// (40) red, yellow 
-__EEPROM_DATA(0, 0, 255, 0, 255, 150, 2, 5);			// (48) blue, darkorange
-__EEPROM_DATA(9, 255, 2, 3, 80, 0, 150, 2);				// (56) green, purple
-__EEPROM_DATA(208, 160, 0, 3, 0, 255, 48, 3);			// (64) orange, turquoise
-__EEPROM_DATA(180, 0, 180, 13, 192, 192, 0, 255);		// (72) pink, warm white			
+__EEPROM_DATA(255, 6, 0, 1, 255, 108, 0, 0);			// (40) red, yellow 
+__EEPROM_DATA(0, 0, 255, 0, 200, 30, 0, 0);				// (48) blue, darkorange
+__EEPROM_DATA(9, 255, 0, 1, 80, 0, 150, 1);				// (56) green, purple
+__EEPROM_DATA(255, 50, 0, 0, 0, 255, 35, 1);			// (64) orange, turquoise
+__EEPROM_DATA(200, 0, 160, 8, 255, 150, 0, 255);		// (72) pink, warm white			
 __EEPROM_DATA(32, 32, 0, 255, 16, 80, 112, 255);		// (80) cool white, daylight
 // programmable colors (defaults)
 //   		( R    G  B   W   bright), brightness is not used at the moment
