@@ -1,6 +1,6 @@
 
 #include <htc.h>								// Processor definition file
-#include "stdlib.h"								// standard library
+#include <stdlib.h>								// standard library
 #include "remote.h"
 #include "control.h"
 #include "eeprom.h"
@@ -67,7 +67,7 @@ void main(void)
 			mode_dim();
 		}
 		//manual mode
-		if (control.mode == MANUAL)
+		else if (control.mode == MANUAL)
 		{
 			function = control.function;
 			switch (function)
@@ -119,7 +119,7 @@ void main(void)
 				}
 			}//switch		
 		}//if program is selected. program mode can only be exited by switching off power or going trough
-		if (control.mode == PROGRAM)
+		else if (control.mode == PROGRAM)
 		{
 			program();
 		}

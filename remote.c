@@ -1,4 +1,4 @@
-#include "htc.h"								// Processor definition file
+#include <htc.h>								// Processor definition file
 #include "remote.h"
 #include "IO.h"
 

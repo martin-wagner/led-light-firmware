@@ -1,5 +1,5 @@
 #include <htc.h>								// Processor definition file
-#include "stdlib.h"								// standard library
+#include <stdlib.h>								// standard library
 #include "remote.h"
 #include "control.h"
 #include "eeprom.h"

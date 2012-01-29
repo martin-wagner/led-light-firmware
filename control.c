@@ -1,5 +1,5 @@
 #include "control.h"
-#include "stdlib.h"
+#include <stdlib.h>
 #include "remote.h"
 #include "htc.h"
 #include "eeprom.h"
@@ -12,6 +12,9 @@ static void bright_factor(char *pfactor);
 
 //time to display something on the 7seg
 static char display_on;
+
+//direction for dim mode
+static char updown1, updown2, updown3;
 
 /*
 Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
@@ -32,6 +35,33 @@ void set_mode(void)
 	{
 		control.mode = DIM;
 		display_on = 30;
+		//timer1 here is used to create radom numbers
+		TMR1ON = 1;
+		//set dim start modes
+		if (color.red < 512)
+		{
+			updown1 = 1;
+		}
+		else
+		{
+			updown1 = 0;
+		}
+		if (color.green < 512)
+		{
+			updown2 = 1;
+		}
+		else
+		{
+			updown2 = 0;
+		}
+		if (color.blue < 512)
+		{
+			updown3 = 1;
+		}
+		else
+		{
+			updown3 = 0;
+		}
 	}
 	else
 	{
@@ -126,20 +156,16 @@ void set_brightness(void)
 	}
 }
 
-
-
 /*
 Starts dim mode. 
 - Dims off white color (not used in dim mode)
 */
 void mode_dim(void)
 {
-	static char updown1, updown2, updown3, i1, i2, i3;
+	static char i1, i2, i3;
 	char *updown1_p, *updown2_p, *updown3_p;
 	int wait1, wait2, wait3;
 	int *red_p, *green_p, *blue_p, *wait1_p, *wait2_p, *wait3_p;
-	//timer1 here is used to create radom numbers
-	TMR1ON = 1;
 	//dim red
 	if (TMR2IF == 1)							// if timer2 postscaler flag is set
 	{
@@ -273,12 +299,17 @@ static void dim_color(char *pupdown, int *pwait, int *pcolor)
 			break;
 		}
 	}
-	// as color brightness and off time is set randomly, it is possilble that all colors are off. In this case we start dimming up instantly
-	if ((color.red < 3 ) && (color.green < 3) && (color.blue < 3))
+	// as color brightness and off time is set randomly, it is possilble that all colors are going off. In this case we start dimming up instantly
+	if ((color.red + color.green + color.blue) < 30)
 	{
-		*pcolor = 3;
+		*pcolor = *pcolor + 2;					// next color can make an dec without being set to dim up
 		*pupdown = 0;
-
+	}
+	// try to prevent color getting too white
+	else if ((color.red + color.green + color.blue) > 2300)
+	{
+		*pcolor = *pcolor - 2;					// next color can make an inc without being set to dim down
+		*pupdown = 1;
 	}
 }
 

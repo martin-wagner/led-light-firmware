@@ -1,6 +1,6 @@
 
 #include <htc.h>								// Processor definition file
-#include "stdlib.h"								// standard library
+#include <stdlib.h>								// standard library
 #include "control.h"
 #include "eeprom.h"
 #include "IO.h"
@@ -147,11 +147,11 @@ void write_eeprom(void)
 	counter++;
 	//write counter  (working???)
 	temp = counter;
-	eeprom_write((EE_COUNT + 2), (char)temp);
+	eeprom_write((EE_COUNT + 2), (unsigned char)temp);
 	temp = counter >> 8;
-	eeprom_write((EE_COUNT + 1), (char)temp);
+	eeprom_write((EE_COUNT + 1), (unsigned char)temp);
 	temp = counter >> 16;
-	eeprom_write((EE_COUNT + 0), (char)temp);
+	eeprom_write((EE_COUNT + 0), (unsigned char)temp);
 }
 
 /* 
