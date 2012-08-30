@@ -1,3 +1,6 @@
+#ifndef CONTROL_H
+#define CONTROL_H
+
 extern void set_mode(void);
 extern void set_function(void);
 extern void set_brightness(void);
@@ -35,8 +38,6 @@ struct Tcolor
 	int white;
 } color, color_desigred;
 
-
-
 // definitions for control structure
 
 // mode -> manual/dim operation
@@ -58,3 +59,5 @@ struct Tcolor
 //brightness_set
 #define BRIGHT_SET 10
 #define BRIGHT_OK 0
+
+#endif

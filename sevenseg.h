@@ -1,3 +1,5 @@
+#ifndef SEVENSEG_H
+#define SEVENSEG_H
 
 extern void lookup(char character);
 
@@ -20,3 +22,4 @@ extern void lookup(char character);
 #define S0 25
 
 
+#endif

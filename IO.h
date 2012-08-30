@@ -1,3 +1,6 @@
+#ifndef IO_H
+#define IO_H
+
 //PORTA GPIOs
 #define SEGD LATA0
 #define SEGC LATA1 
@@ -28,3 +31,5 @@
 #define PWM_GREEN_L CCP3CONbits.DC3B
 #define PWM_BLUE CCPR4L
 #define PWM_BLUE_L CCP4CONbits.DC4B
+
+#endif

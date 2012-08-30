@@ -1,3 +1,6 @@
+#ifndef EEPROM_H
+#define EEPROM_H
+
 extern void load_eeprom(void);
 extern void write_eeprom(void);
 extern void read_color(char adr);
@@ -34,3 +37,5 @@ extern void write_byte(char adr, char byte);
 //limits
 #define EE_MINPROG 88
 #define EE_MAXPROG 160
+
+#endif

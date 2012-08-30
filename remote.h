@@ -1,3 +1,6 @@
+#ifndef REMOTE_H
+#define REMOTE_H
+
 extern bit get_rc5_control(void);
 extern bit test_rc5_control(void);
 
@@ -99,3 +102,5 @@ command - 6 bits
 //cancel
 #define CMD_CANCEL 			0b00101101
 //command musn't be 0xff, this is used as 'invalid command'!!!!!!!
+
+#endif

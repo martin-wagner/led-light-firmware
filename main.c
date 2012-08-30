@@ -192,7 +192,6 @@ void main(void)
 	}//while	
 }//main
 
-
 /*
 initialization process
 */
