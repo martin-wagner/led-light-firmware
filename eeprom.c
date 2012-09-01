@@ -19,24 +19,24 @@ __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (24)
 __EEPROM_DATA(0, 0, 0, 0, 0, 0, 0, 0);					// (32)
 
 // colors  	(   R  G  B  W  R   G   B  W )				// block start adress
-__EEPROM_DATA(255, 6, 0, 1, 255, 108, 0, 0);			// (40) red, yellow 
-__EEPROM_DATA(0, 0, 255, 0, 200, 30, 0, 0);				// (48) blue, darkorange
-__EEPROM_DATA(9, 255, 0, 1, 80, 0, 150, 1);				// (56) green, purple
-__EEPROM_DATA(255, 50, 0, 0, 0, 255, 35, 1);			// (64) orange, turquoise
-__EEPROM_DATA(200, 0, 160, 8, 255, 150, 0, 255);		// (72) pink, warm white			
-__EEPROM_DATA(32, 32, 0, 255, 16, 80, 112, 255);		// (80) cool white, daylight
+__EEPROM_DATA(255, 43, 0, 5, 255, 181, 0, 0);			// (40) red, yellow 
+__EEPROM_DATA(0, 0, 255, 0, 231, 104, 0, 0);			// (48) blue, darkorange
+__EEPROM_DATA(56, 255, 0, 5, 160, 0, 207, 5);			// (56) green, purple
+__EEPROM_DATA(255, 131, 0, 0, 0, 255, 112, 5);			// (64) orange, turquoise
+__EEPROM_DATA(232, 0, 212, 52, 255, 207, 0, 255);		// (72) pink, warm white			
+__EEPROM_DATA(107, 107, 0, 255, 77, 160, 184, 255);		// (80) cool white, daylight
 // programmable colors (defaults)
 //   		( R    G  B   W   bright), brightness is not used at the moment
-__EEPROM_DATA(255, 8, 0, 60, 255, 0, 0, 0);				// (88) bright red
-__EEPROM_DATA(0, 30, 255, 40, 255, 0, 0, 0);			// (96) bright blue
-__EEPROM_DATA(9, 255, 2, 40, 255, 0, 0, 0);				// (104) bright green
-__EEPROM_DATA(0, 255, 48, 15, 255, 0, 0, 0);			// (112) bright turquoise
-__EEPROM_DATA(40, 50, 0, 0, 255, 0, 0, 0);				// (120) dark yellow
-__EEPROM_DATA(5, 50, 0, 0, 255, 0, 0, 0);				// (128) dark green
-__EEPROM_DATA(50, 5, 0, 0, 255, 0, 0, 0);				// (136) dark red
-__EEPROM_DATA(0, 0, 25, 0, 255, 0, 0, 0);	    		// (144) dark blue
+__EEPROM_DATA(255, 52, 0, 142, 255, 0, 0, 0);			// (88) bright red
+__EEPROM_DATA(0, 104, 255, 119, 255, 0, 0, 0);			// (96) bright blue
+__EEPROM_DATA(56, 255, 18, 119, 255, 0, 0, 0);			// (104) bright green
+__EEPROM_DATA(0, 255, 128, 74, 255, 0, 0, 0);			// (112) bright turquoise
+__EEPROM_DATA(119, 131, 0, 0, 255, 0, 0, 0);			// (120) dark yellow
+__EEPROM_DATA(39, 131, 0, 0, 255, 0, 0, 0);				// (128) dark green
+__EEPROM_DATA(131, 39, 0, 0, 255, 0, 0, 0);				// (136) dark red
+__EEPROM_DATA(0, 0, 96, 0, 255, 0, 0, 0);	    		// (144) dark blue
 __EEPROM_DATA(255, 255, 255, 255, 255, 0, 0, 0);		// (152) all on
-__EEPROM_DATA(130, 130, 0, 255, 255, 0, 0, 0);			// (160) startup color 
+__EEPROM_DATA(107, 107, 0, 255, 255, 0, 0, 0);			// (160) startup color 
 
 /*
 //DO NOT CHANGE, for new use unused bytes!!!

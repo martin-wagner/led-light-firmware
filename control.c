@@ -9,12 +9,16 @@
 static void dim_color(char *pupdown, int *pwait, int *pcolor);
 static void bright_color(int *pcolor);
 static void bright_factor(char *pfactor);
+static void fade_color(int *value, int *desigred, char count_value);
 
 //time to display something on the 7seg
 static char display_on;
 
 //direction for dim mode
 static char updown1, updown2, updown3;
+
+// delay time for color fading
+#define COUNT_MAX 150
 
 /*
 Checks rc5.command to decide which mode is selected (dim, manual or program). The ELSE-IF is necessary as otherwise if 
@@ -607,48 +611,23 @@ fades color from momentary value to desigred value
 */
 void func_fadecolor(void)
 {
+	unsigned int tmr1_value;
+	char count_value;
+
 	//here timer1 is used as timer
 	TMR1ON = 1;				
-	if (TMR1 > 150)
+	if (TMR1 > COUNT_MAX)
 	{
+		//as timer1 exceeds it's max value most of the times, we need to know how many times
+		//it did so we can compensate it by adding an equivalent value
+		tmr1_value = TMR1;
 		TMR1 = 0;
-		// we have to dim up or down a color to get to the new brightness. nothing is done if equal. else statement would include equal!
-		//red
-		if (color.red > color_desigred.red)
-		{
-			color.red--;
-		}
-		if (color.red < color_desigred.red)
-		{
-			color.red++;
-		}
-		//green
-		if (color.green > color_desigred.green)
-		{
-			color.green--;
-		}
-		if (color.green < color_desigred.green)
-		{
-			color.green++;
-		}
-		//blue
-		if (color.blue > color_desigred.blue)
-		{
-			color.blue--;
-		}
-		if (color.blue < color_desigred.blue)
-		{
-			color.blue++;
-		}
-		//white
-		if (color.white > color_desigred.white)
-		{
-			color.white--;
-		}
-		if (color.white < color_desigred.white)
-		{
-			color.white++;
-		}
+		count_value = tmr1_value / COUNT_MAX + 1;		//always round up
+		//fade colors
+		fade_color(&color.red, &color_desigred.red, count_value);
+		fade_color(&color.green, &color_desigred.green, count_value);
+		fade_color(&color.blue, &color_desigred.blue, count_value);
+		fade_color(&color.white, &color_desigred.white, count_value);
 	}
 	//when all colors are as desigred, switch off timer and go back to idle
 	if ((color.red == color_desigred.red) && (color.green == color_desigred.green) && 
@@ -656,6 +635,32 @@ void func_fadecolor(void)
 	{
 		TMR1ON = 0;
 		control.function = IDLE;
+	}
+}
+
+/*
+fades single color up or down to desigred color value by count_value
+*/
+static void fade_color(int *value, int *desigred, char count_value)
+{
+	// we have to dim up or down a color to get to the new brightness. nothing is done if equal.
+	if (*value > *desigred)
+	{
+		*value = *value - count_value;
+		//check for overshoot
+		if (*value < *desigred)
+		{
+			*value = *desigred;
+		}
+	}
+	if (*value < *desigred)
+	{
+		*value = *value + count_value;
+		//check for overshoot
+		if (*value > *desigred)
+		{
+			*value = *desigred;
+		}
 	}
 }
 
@@ -686,7 +691,7 @@ static void bright_factor(char *pfactor)
 	{
 		if (rc5.speed == FAST)
 		{	
-			factor = factor + 8;
+			factor = factor + 16;
 		}
 		else
 		{
@@ -698,17 +703,17 @@ static void bright_factor(char *pfactor)
 	{
 		if (rc5.speed == FAST)
 		{	
-			factor = factor - 8;
+			factor = factor - 16;
 		}
 		else
 		{
 			factor--;
 		}
 	}
-	// fit computed result back into char limits. By using "1", dimming "off" is not possible.
-	if (factor < 1)
+	// fit computed result back into char limits. By using "5", dimming "off" is not possible.
+	if (factor < 5)
 	{
-		factor = 1;
+		factor = 5;
 	}
 	if (factor > 0xff)
 	{

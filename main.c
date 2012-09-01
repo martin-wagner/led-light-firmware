@@ -11,9 +11,8 @@
 __CONFIG(0x39dc);
 __CONFIG(0x3fff);
 
-
+int brightness_correction(int linear);
 void init(void);
-
 
 void main(void)
 {
@@ -21,6 +20,7 @@ void main(void)
 	unsigned int supply;
 	short long int temp;
 	static bit error;
+
 	init();
 	load_eeprom();
 	ADGO = 1;									// start first a/d conversation
@@ -73,57 +73,39 @@ void main(void)
 			switch (function)
 			{
 				case FUNC_POWER:
-				{
 					onoff();
 					break;
-				}
 				case FUNC_COLOR:
-				{
 					func_color();
 					break;
-				}
 				case FUNC_COLOR_SET:
-				{
 					func_color_set();
 					break;
-				}
 				case FUNC_PROGRAM:
-				{
 					fucn_program();
 					break;
-				}
 				case FUNC_COLORSONOFF:
-				{
 					fuc_colorsonoff();
 					break;
-				}
-				case FUNC_COLOR_SELECT:
-				{	
+				case FUNC_COLOR_SELECT:	
 					func_colorselect();
 					break;
-				}
-				case FUNC_WHITEONOFF:
-				{	
+				case FUNC_WHITEONOFF:	
 					fuc_whiteonoff();
 					break;
-				}
-				case FUNC_FADING:
-				{	
+				case FUNC_FADING:	
 					func_fadecolor();
 					break;
-				}
 				//idle state
-				default:
-				{																																																																																																																																																																																																																																																																																																																																																																																																																																																																																
-					//do nothing
-				}
+				default:	
+					break;																																																																																																																																																																																																																																																																																																																																																																																																																																																	
 			}//switch		
 		}//if program is selected. program mode can only be exited by switching off power or going trough
 		else if (control.mode == PROGRAM)
 		{
 			program();
 		}
-		//chech if brightness up/down is requested, increase or decrease global brightness
+		//check if brightness up/down is requested, increase or decrease global brightness
 		if (control.brightness_set == BRIGHT_SET)
 		{
 			//increase/decrease overall brighness
@@ -131,31 +113,53 @@ void main(void)
 			//reset request
 			control.brightness_set = BRIGHT_OK;
 		}
-		//calculate PWM values including brightness and update PWM values
-		temp = color.red;
-		temp = (control.brightness_factor * temp) >> 8;		// >>8 = /0xff
-		//high
-		PWM_RED = temp >> 2;
-		//two low bits
-		PWM_RED_L = temp;
-		temp = color.green;
-		temp = (control.brightness_factor * temp) >> 8;
-		//high
-		PWM_GREEN = temp >> 2;
-		//two low bits
-		PWM_GREEN_L = temp;
-		temp = color.blue;// * control.brightness_factor;
-		temp = (control.brightness_factor * temp) >> 8;
-		//high
-		PWM_BLUE = temp >> 2;
-		//two low bits
-		PWM_BLUE_L = temp;
-		temp = color.white;// * control.brightness_factor;
-		temp = (control.brightness_factor * temp) >> 8;
-		//high
-		PWM_WHITE = temp >> 2;
-		//two low bits
-		PWM_WHITE_L = temp;
+		//calculate PWM values including brightness and update PWM values if necessary
+		if ((color.red != color_old.red) ||
+			(control.brightness_old != control.brightness_factor))
+		{
+			temp = color.red;
+			temp = (control.brightness_factor * temp) >> 8;		// >>8 = /0xff
+			temp = brightness_correction(temp);
+			//high
+			PWM_RED = temp >> 2;
+			//two low bits
+			PWM_RED_L = temp;
+		}
+		if ((color.green != color_old.green) ||
+			(control.brightness_old != control.brightness_factor))
+		{
+			temp = color.green;
+			temp = (control.brightness_factor * temp) >> 8;
+			temp = brightness_correction(temp);
+			//high
+			PWM_GREEN = temp >> 2;
+			//two low bits
+			PWM_GREEN_L = temp;
+		}
+		if ((color.blue != color_old.blue) ||
+			(control.brightness_old != control.brightness_factor))
+		{
+			temp = color.blue;
+			temp = (control.brightness_factor * temp) >> 8;
+			temp = brightness_correction(temp);
+			//high
+			PWM_BLUE = temp >> 2;
+			//two low bits
+			PWM_BLUE_L = temp;
+		}
+		if ((color.white != color_old.white) ||
+			(control.brightness_old != control.brightness_factor))
+		{
+			temp = color.white;
+			temp = (control.brightness_factor * temp) >> 8;
+			temp = brightness_correction(temp);
+			//high
+			PWM_WHITE = temp >> 2;
+			//two low bits
+			PWM_WHITE_L = temp;
+		}
+		color_old = color;
+		control.brightness_old = control.brightness_factor;
 		//check if supply voltage drops out and store control data and colors
 		if (ADGO == 0)		//-> a/d conversation finished
 		{
@@ -191,6 +195,59 @@ void main(void)
 		}
 	}//while	
 }//main
+
+/*
+Brightness Correction
+this is done according to http://neuroelec.com/2011/04/led-brightness-to-your-eye-gamma-correction-no/
+and "“Gamma” and its Disguises: The Nonlinear Mappings of Intensity in Perception, CRTs, Film and Video
+	 By Charles A. Poynton"
+
+based on CIE L* function "L* = 116(Y / Yn)^1/3 -16" which describes the perception of the human eye
+re-arranged to get necessary intensity of LEDs as an integer value from 0..1023
+-> pwm = ((16 * 10.23 + linear) / 116 * 10.23)^3 * 100 * 10.23
+optimized to use float multiplication as only float operation
+-> pwm = ((164 + linear) * 0.00084268716)^3 * 1023
+*/
+int brightness_correction(int linear)
+{
+	float result;
+	int normalized;
+		
+	// the normalization formula doesn't work with low values, so we have to use
+	// linear values instead
+	if (linear == 0)
+	{
+		return 0;
+	}
+	else if (linear < 6) 
+	{
+		return 1;
+	}
+	else if (linear < 11) 
+	{
+		return 2;
+	}
+	else if (linear < 15) 
+	{
+		return 3;
+	}
+	else 
+	{
+		result = ((164 + linear) * 0.00084268716);
+		result = result * result * result * 1023;
+		normalized = (int)result + 1;
+	}
+	// is normalized value plausible
+	if (normalized > 1023)
+	{
+		normalized = 1023;
+	}
+	if (normalized < 3)
+	{
+		normalized = 3;
+	}
+	return normalized;
+}
 
 /*
 initialization process

@@ -18,3 +18,4 @@
 /startup.obj
 /startup.rlf
 *.dep
+*.tmp

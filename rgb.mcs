@@ -2,7 +2,7 @@
 MagicCookie={0b13fe8c-dfe0-40eb-8900-6712719559a7}
 Version=1.0
 [File000]
-Location=f:\elektronik\led leuchte\firmware\control.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\control.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -11,11 +11,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File001]
-Location=f:\elektronik\led leuchte\firmware\eeprom.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\eeprom.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -24,11 +24,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File002]
-Location=f:\elektronik\led leuchte\firmware\interrupts.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\interrupts.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -37,11 +37,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File003]
-Location=f:\elektronik\led leuchte\firmware\main.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\main.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -50,11 +50,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File004]
-Location=f:\elektronik\led leuchte\firmware\remote.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\remote.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -63,11 +63,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File005]
-Location=f:\elektronik\led leuchte\firmware\program.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\program.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -76,11 +76,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File006]
-Location=f:\elektronik\led leuchte\firmware\sevenseg.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\sevenseg.p1
 Folder=Intermediary
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -89,11 +89,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File007]
-Location=f:\elektronik\led leuchte\firmware\rgb.cof
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.cof
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -102,11 +102,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File008]
-Location=f:\elektronik\led leuchte\firmware\rgb.hex
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.hex
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -115,11 +115,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File009]
-Location=f:\elektronik\led leuchte\firmware\rgb.sym
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.sym
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -128,11 +128,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File010]
-Location=f:\elektronik\led leuchte\firmware\rgb.map
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.map
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -141,11 +141,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File011]
-Location=f:\elektronik\led leuchte\firmware\rgb.hxl
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.hxl
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -154,11 +154,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File012]
-Location=f:\elektronik\led leuchte\firmware\startup.lst
+Location=f:\users\martin\led leuchte\led-light-firmware\startup.lst
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -167,11 +167,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File013]
-Location=f:\elektronik\led leuchte\firmware\startup.rlf
+Location=f:\users\martin\led leuchte\led-light-firmware\startup.rlf
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -180,11 +180,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File014]
-Location=f:\elektronik\led leuchte\firmware\doprnt.p1
+Location=f:\users\martin\led leuchte\led-light-firmware\doprnt.p1
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -193,11 +193,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File015]
-Location=f:\elektronik\led leuchte\firmware\doprnt.pre
+Location=f:\users\martin\led leuchte\led-light-firmware\doprnt.pre
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -206,11 +206,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File016]
-Location=f:\elektronik\led leuchte\firmware\rgb.obj
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.obj
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -219,11 +219,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File017]
-Location=f:\elektronik\led leuchte\firmware\rgb.lst
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.lst
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -232,11 +232,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File018]
-Location=f:\elektronik\led leuchte\firmware\rgb.rlf
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.rlf
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -245,11 +245,11 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=
 [File019]
-Location=f:\elektronik\led leuchte\firmware\rgb.sdb
+Location=f:\users\martin\led leuchte\led-light-firmware\rgb.sdb
 Folder=Output
 DeviceName=PIC16F1827
 LanguageToolSuiteID={507D93FD-16F1-4270-980F-0C7C0207E6D3}
@@ -258,6 +258,6 @@ LanguageToolLocation=e:\microchip\HI-TECH Software\PICC\9.81\bin\picc.exe
 PPAD=$(BINDIR)||$(TMPDIR)||$(AINDIR)||$(INCDIR)||$(LIBDIR)||$(LKRDIR)||
 SOLK=<src>|control.c|eeprom.c|interrupts.c|main.c|remote.c|program.c|sevenseg.c||<obj>||<lib>||<lkr>||
 SuiteArgsString=
-ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94 C9=4 FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0
+ToolArgsString=C6=31 DB=0 DC=9 DF=0 DD=1 C2=0 C3=0 DE=1 D7=1 11E=0 121=0 122=0 123=0 124=0 125=0 11F=94FE=31 EC=1 F0=0 EF=1 EE=0 104=0 E9= C4=0 F2= F3= F4= F8=1 F5= F9=0 FA=0 FB=0 C0=0 C1=0 BD=0 BC=0 BB=0 BF=0 BE=0 B8= 101=0 103= 102=0 BA= FF=0 100=0 106=0 109=0 10A=1 10B=0 10C=0 10E=0 10F=1 110=0 118=0 116=0 117= 10D=0 114=-1 113=-1 111=0 115=-1 F5=0 E5=0 E7=0 E8=0 126=0 F1=0 F6= F7= B9=-1 107=0 C9=1
 TraceCmdString=
 DebugOptions=

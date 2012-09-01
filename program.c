@@ -44,7 +44,6 @@ void program(void)
 	{
 		//program user color 1
 		case 1:
-		{
 			//load first memory address
 			control.eepointer = EE_MINPROG;
 			//display
@@ -52,10 +51,8 @@ void program(void)
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 2:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -64,19 +61,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 2
 		case 3:
-		{
 			//display
 			lookup(2);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 4:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -85,19 +78,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 3
 		case 5:
-		{
 			//display
 			lookup(3);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 6:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -106,19 +95,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 4
 		case 7:
-		{
 			//display
 			lookup(4);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 8:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -127,19 +112,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 5
 		case 9:
-		{
 			//display
 			lookup(5);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 10:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -148,19 +129,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 6
 		case 11:
-		{
 			//display
 			lookup(6);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 12:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -169,19 +146,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 7
 		case 13:
-		{
 			//display
 			lookup(7);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 14:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -189,20 +162,16 @@ void program(void)
 			//reset LED
 			LED_STATUS = 0;
 			//and go to next state
-			state ++;
-		}		
+			state ++;		
 		//program user color 8
 		case 15:
-		{
 			//display
 			lookup(8);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 16:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -211,19 +180,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 9
 		case 17:
-		{
 			//display
 			lookup(9);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 18:
-		{
 			//go to next memory address
 			control.eepointer = control.eepointer + 8;	
 			//clear written
@@ -232,19 +197,15 @@ void program(void)
 			LED_STATUS = 0;
 			//and go to next state
 			state ++;
-		}
 		//program user color 10
 		case 19:
-		{
 			//display
 			lookup(0);
 			//write output
 			program_color();
 			break;
-		}
 		//prepare for next programming state
 		case 20:
-		{
 			//reset LED
 			LED_STATUS = 0;
 			//clear written
@@ -253,17 +214,13 @@ void program(void)
 			character = SD;
 			//and go to next state
 			state ++;
-		}
 		//set up speed delay in dim mode. 
 		case 21:
-		{
 			character = set_dim_speed(character);
 			lookup(character);
 			break;
-		}
 		//prepare for next programming state
 		case 22:
-		{
 			//reset LED
 			LED_STATUS = 0;
 			//clear written
@@ -272,18 +229,14 @@ void program(void)
 			character = SP;
 			//and go to next state
 			state ++;
-		}
 		//we support 4 startup modes: Stored colors + stored brightness; stored colors + maximum brightness;
 		//load color 10 + stored brightness; load color 10 + maximum brightness. in the last 2 modes, startup is always MANUAL!
 		case 23:
-		{
 			character = set_powerup_mode(character);
 			lookup(character);  
 			break; 
-		}
 		//reset values to start. when changing the case number, also edit "cancel"
 		case 24:
-		{
 			//clear display
 end:		lookup(S0);
 			//finish programming
@@ -298,7 +251,6 @@ end:		lookup(S0);
 			//reset LED
 			LED_STATUS = 0;
 			break;
-		}
 	}	
 }
 

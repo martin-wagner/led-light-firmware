@@ -25,6 +25,7 @@ struct Tcontrol
 	int eepointer;
 	char brightness_set;
 	char brightness_factor;
+	char brightness_old;
 	char dim_mode_speed;
 	char power_up_mode;
 } control;
@@ -36,7 +37,7 @@ struct Tcolor
 	int green;
 	int blue;
 	int white;
-} color, color_desigred;
+} color, color_desigred, color_old;
 
 // definitions for control structure
 
