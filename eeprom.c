@@ -120,12 +120,9 @@ void write_byte(char addr, char byte)
 
 /*
 write control data and colors to EEPROM. This is done when the power drops out, obviously the PIC needs some time to do this!!!
-increments switch-on counter by one. can be read with pickit. we use 24 bit, so the eeprom will quit working before we overflow
 */
 void write_eeprom(void)
 {
-	unsigned int temp;
-	unsigned short long int counter;	
 	//we musn't resume in program mode
 	if (control.mode == PROGRAM)
 	{
@@ -137,21 +134,6 @@ void write_eeprom(void)
 	eeprom_write((EE_RUNDATA + 3), control.eepointer);
 	eeprom_write((EE_RUNDATA + 4), control.brightness_factor);
 	write_color(EE_RUNDATA + 8);
-	//read counter
-	counter = eeprom_read(EE_COUNT + 0);
-	counter = counter << 16;
-	temp = eeprom_read(EE_COUNT + 1);
-	counter = counter + (temp << 8);
-	temp = eeprom_read(EE_COUNT + 2);
-	counter = counter + temp;
-	counter++;
-	//write counter  (working???)
-	temp = counter;
-	eeprom_write((EE_COUNT + 2), (unsigned char)temp);
-	temp = counter >> 8;
-	eeprom_write((EE_COUNT + 1), (unsigned char)temp);
-	temp = counter >> 16;
-	eeprom_write((EE_COUNT + 0), (unsigned char)temp);
 }
 
 /* 
@@ -160,44 +142,51 @@ we can start processing where we stopped before power off
 */
 void load_eeprom(void)
 {
+	control.mode = eeprom_read(EE_RUNDATA + 0);
+	control.function = eeprom_read(EE_RUNDATA + 1);
 	control.color_button = eeprom_read(EE_RUNDATA + 2);
-	control.eepointer = eeprom_read(EE_RUNDATA + 3);
+	control.eepointer = EE_MINPROG; //no way to validate eeprom value
 	control.brightness_factor = eeprom_read(EE_RUNDATA + 4);
 	control.dim_mode_speed = eeprom_read(EE_RUNDATA + 5);
 	control.power_up_mode = eeprom_read(EE_RUNDATA + 6);
+
 	//test which power up mode we are using
 	switch (control.power_up_mode)
 	{	
-		//load color + max bright. no break, so case 1 is also executed to load colors and mode.
-		case 2:
-		{				
+		//load color
+		case 2:			
 			control.brightness_factor = 0xff;	
-		}
-		//load colors and mode
+			// fall trough
 		case 1:
-		{
-			control.mode = eeprom_read(EE_RUNDATA + 0);
-			control.function = eeprom_read(EE_RUNDATA + 1);
 			read_color(EE_RUNDATA + 8);
 			//read color reads to color_desigred but here we need it directly
 			color = color_desigred;
 			break;
-		}
-		//same as above, mode = MANUAL, load color 10
-		case 4:
-		{				
+		//load white
+		case 4:		
 			control.brightness_factor = 0xff;	
-		}
-		case 3:
-		{
+			// fall trough
+		default:
 			control.mode = MANUAL;
 			control.function = IDLE;
 			read_color(EE_PROG9);
 			color = color_desigred;
 			break;
-		}	
 	}
-	//check if we have all LEDs switched off in loaded color for any reason
+
+	/* Plausibility checks */
+
+	/* Mode */
+	if ((control.mode != MANUAL) && (control.mode != DIM))
+	{
+		control.mode = MANUAL;
+	}
+	/* Brightness */
+	if (control.brightness_factor == 0)
+	{
+		control.brightness_factor == 100;
+	}
+	/* check if we have all LEDs switched off in loaded color for any reason */
 	if ((color.red || color.green || color.blue || color.white) == 0)
 	{
 		color.white = 100;
