@@ -21,7 +21,7 @@
 #define EEPROM_H
 
 extern void load_eeprom(void);
-extern void write_eeprom(void);
+extern void write_eeprom(char force); //0 = check for change, 1 = always write
 extern void read_color(char adr);
 extern void write_color(char adr);
 extern void write_byte(char adr, char byte);

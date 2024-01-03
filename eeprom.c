@@ -20,10 +20,15 @@
 
 #include <htc.h>								// Processor definition file
 #include <stdlib.h>								// standard library
+#include <stdio.h>
+#include <string.h>
 #include "control.h"
 #include "eeprom.h"
 #include "IO.h"
 #include "remote.h"
+
+struct Tcontrol shadow_control;
+struct Tcolor shadow_color;
 
 //*****************************
 //initial data stored in EEPROM.
@@ -138,21 +143,54 @@ void write_byte(char addr, char byte)
 }
 
 /*
-write control data and colors to EEPROM. This is done when the power drops out, obviously the PIC needs some time to do this!!!
+write control data and colors to EEPROM
 */
-void write_eeprom(void)
+void write_eeprom(char force)
 {
+	int eq;
+
 	//we musn't resume in program mode
 	if (control.mode == PROGRAM)
 	{
-		control.mode = MANUAL;
+		return;
 	}
-	eeprom_write((EE_RUNDATA + 0), control.mode);
-	eeprom_write((EE_RUNDATA + 1), control.function);
-	eeprom_write((EE_RUNDATA + 2), control.color_button);
-	eeprom_write((EE_RUNDATA + 3), control.eepointer);
-	eeprom_write((EE_RUNDATA + 4), control.brightness_factor);
-	write_color(EE_RUNDATA + 8);
+	if (force) {
+		eeprom_write((EE_RUNDATA + 0), control.mode);
+		eeprom_write((EE_RUNDATA + 1), control.function);
+		eeprom_write((EE_RUNDATA + 2), control.color_button);
+		eeprom_write((EE_RUNDATA + 3), control.eepointer);
+		eeprom_write((EE_RUNDATA + 4), control.brightness_factor);
+		write_color(EE_RUNDATA + 8);
+	}
+	else 
+	{
+		if (shadow_control.mode != control.mode) 
+		{	
+			eeprom_write((EE_RUNDATA + 0), control.mode);
+		}
+		if (shadow_control.function != control.function) 
+		{	
+			eeprom_write((EE_RUNDATA + 1), control.function);
+		}
+		if (shadow_control.color_button != control.color_button) 
+		{	
+			eeprom_write((EE_RUNDATA + 2), control.color_button);
+		}
+		if (shadow_control.eepointer != control.eepointer) 
+		{	
+			eeprom_write((EE_RUNDATA + 3), control.eepointer);
+		}
+		if (shadow_control.brightness_factor != control.brightness_factor) 
+		{	
+			eeprom_write((EE_RUNDATA + 4), control.brightness_factor);
+		}
+		eq = memcmp(&shadow_color, &color, sizeof(shadow_color));
+		if ((control.mode != DIM) && !eq) {
+			write_color(EE_RUNDATA + 8);
+		}
+	}
+	shadow_control = control;
+	shadow_color = color;
 }
 
 /* 
@@ -210,4 +248,7 @@ void load_eeprom(void)
 	{
 		color.white = 100;
 	}
+
+	shadow_control = control;
+	shadow_color = color;
 }

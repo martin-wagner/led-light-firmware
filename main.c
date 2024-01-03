@@ -37,6 +37,7 @@ void main(void)
 {
 	char n, function, test = 0;
 	unsigned int supply;
+	unsigned int count = 0;
 	short long int temp;
 	static bit error;
 
@@ -179,7 +180,16 @@ void main(void)
 		}
 		color_old = color;
 		control.brightness_old = control.brightness_factor;
-		//check if supply voltage drops out and store control data and colors
+
+		//check and dump data to eeprom
+		//fixme how many times a second is the check done with "10000"?
+		count ++;
+		if (count > 10000) {
+			write_eeprom(0);
+			count = 0;
+		}
+
+		//check if supply voltage drops out
 		if (ADGO == 0)		//-> a/d conversation finished
 		{
 			supply = ADRES;
@@ -188,13 +198,6 @@ void main(void)
 			//if supply < ~4.8V
 			if (supply < 1000)
 			{
-				//when power finally drops out, the pic restarts several times (and then comes here straight again). 
-				//this prevents that the eeprom ist overwritten in this stage.
-				//todo: how do I assure that the adc doesn't do any strange things in this stage (like produce values between 800 and 1024)
-				if ((supply > 800) && (supply < 1024))
-				{
-					write_eeprom();
-				}
 				//switch on display to drain capacitor
 				lookup(8);
 				LED_STATUS = 1;
