@@ -285,6 +285,7 @@ void init(void)
 	
 	/* 
 	set up pwm. period length depends on timer2 prescaler and timer reset value => prescaler 16 and reset 255 => 250 Hz. 
+	Higher frequency leads to coil whine
 	*/
 	//switch all io to input
 	TRISA = 0xff;
@@ -299,7 +300,7 @@ void init(void)
 	bit 7 = 0
 	TOUTPS (bit 6..3) postscaler; 1111 = 16, 1110 = 15 and so on
 	TMRxON = 1
-	TxCKPS = 00 prescaler off
+	TxCKPS = 10 prescaler 16
 	*/
 	T2CON = 0b0101110;								// timer on, prescaler; postscaler for dimming speed (slow)
 	T4CON = 0b0110110;								// dimming speed medium
